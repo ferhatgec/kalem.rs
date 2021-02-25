@@ -58,7 +58,29 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         '#' => {
                             if _tokens[i] == format!("#{}", codegen::_KALEM_IMPORT).as_str() {
                                 kalem_codegen(KalemTokens::KalemImport, &mut codegen, _tokens[i + 1], "");
+                            }
+                            else if _tokens[i] == format!("#{}", codegen::_KALEM_DEFINE).as_str() {
+                                if _tokens[i + 2].chars().next().unwrap() == '"' {
+                                    let mut string_data: String = String::new();
+                                    let mut f: usize = i + 2;
 
+                                    loop {
+                                        string_data.push_str(_tokens[f]);
+
+                                        if _tokens[f].chars().nth(_tokens[f].len()-1).unwrap() == '"' {
+                                            break;
+                                        }
+                                        else {
+                                            string_data.push(' ');
+                                            f = f + 1;
+                                        }
+                                    }
+
+                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, string_data.as_str(), _tokens[i + 1]);
+                                }
+                                else {
+                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, _tokens[i + 2], _tokens[i + 1]);
+                                }
                             }
                         },
                         '@' => {

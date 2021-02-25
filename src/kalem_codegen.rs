@@ -17,6 +17,8 @@ pub mod codegen {
     pub const _KALEM_RETURN:            &str = "return";
     pub const _KALEM_PRINT:             &str = "print";
 
+    pub const _KALEM_DEFINE:            &str = "defn";
+
     pub const _KALEM_VOID:              &str = "void";
 
     pub const _CPP_KALEM_INT:           &str = "int";
@@ -29,10 +31,14 @@ pub mod codegen {
     pub const _CPP_KALEM_RETURN:        &str = "return";
     pub const _CPP_KALEM_PRINT:         &str = "cout";
 
+    pub const _CPP_KALEM_DEFINE:        &str = "define";
+
     pub const _CPP_KALEM_VOID:          &str = "void";
 
     pub const LEFT_CURLY_BRACKET:       char = '{';
     pub const RIGHT_CURLY_BRACKET:      char = '}';
+
+    pub const SHARP:                    char = '#';
 
     pub const SEMICOLON:                char = ';';
     pub const EQUAL:                    char = '=';
@@ -53,6 +59,8 @@ pub enum KalemTokens {
 
     KalemFunction,
     KalemFunctionCall,
+
+    KalemDefine,
 
     KalemLeftCurlyBracket,
     KalemRightCurlyBracket,
@@ -135,6 +143,12 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_generated.push_str(format!("{} {}()",
                                                   keyword,
                                                   codegen::_CPP_KALEM_MAIN).as_str());
+        },
+        KalemTokens::KalemDefine => {
+            data.kalem_generated.push_str(format!("#{} {} {}",
+                                                  codegen::_CPP_KALEM_DEFINE,
+                                                  variable,
+                                                  keyword).as_str());
         },
         KalemTokens::KalemReturn => {
             data.kalem_generated.push_str(format!("{} {};",

@@ -1,6 +1,8 @@
 #import <ios>
 #import <stdstr>
 
+#defn TEST "Hi, preprocessor!\n"
+
 @my_function void {
     @print "Hi, from Kalem function!\n"
 }
@@ -21,6 +23,8 @@
     @print "\n"
 
     @my_function
+
+    @print TEST
 
     @return 0
 }
