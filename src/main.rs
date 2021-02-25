@@ -51,9 +51,12 @@ fn main() {
     let args: Vec<_> = env::args().collect();
 
     if args.len() < 2 {
-        println!("{}\n{}",
+        println!("{}\n{} {} [options] file...\n{}\n{}",
                  "Fegeya Kalem compiler\n",
-                 "kalem [file]");
+                 "Usage:",
+                 args[0],
+                 "Options:",
+                 "--cpp: Get generated C++ code.");
 
         std::process::exit(0);
     }
@@ -62,8 +65,16 @@ fn main() {
 
     // file = args[1].replace(".kalem", "");
 
+    let mut option: bool= false;
+    let data: Kalem;
 
-    let data: Kalem = init(&args[1]);
+    if &args[1] == "--cpp" && args.len() > 2 {
+        data = init(&args[2]);
+        option = true;
+    }
+    else {
+        data = init(&args[1]);
+    }
 
     let filename = data.kalem_filename.clone().replace(".kalem", ".cpp");
 
@@ -98,7 +109,7 @@ fn main() {
         print!("[Error] : \n{}", _s);
     }
 
-    if Path::new(&filename.replace(".cpp", "")).exists() {
+    if Path::new(&filename.replace(".cpp", "")).exists() && option == false {
         fs::remove_file(&filename);
     }
 }
