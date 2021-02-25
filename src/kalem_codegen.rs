@@ -50,7 +50,8 @@ pub struct KalemCodegenStruct {
 
 pub fn kalem_codegen(token: KalemTokens,
     data: &mut KalemCodegenStruct,
-    keyword: &str) {
+    keyword: &str,
+    variable: &str) {
     match token {
         KalemTokens::KalemImport => {
             let mut _keyword = String::from(keyword);
@@ -64,6 +65,17 @@ pub fn kalem_codegen(token: KalemTokens,
                                                   _keyword).as_str());
 
             drop(_keyword);
+        },
+        KalemTokens::KalemString => {
+            data.kalem_generated.push_str(format!("std::{} {}",
+                                                  codegen::_CPP_KALEM_STRING,
+                                                  variable).as_str());
+
+            if keyword != "" {
+                data.kalem_generated.push_str(keyword);
+            }
+
+            data.kalem_generated.push(codegen::SEMICOLON);
         },
         KalemTokens::KalemMain => {
             data.kalem_generated.push_str(format!("{} {}()",

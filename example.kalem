@@ -1,6 +1,7 @@
 #import <ios>
 
 @main int {
-    @print "Hello, world!\n"
+    string test = "Hello, Kalem!\n"
+    @print test
     @return 0
 }
