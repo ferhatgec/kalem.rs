@@ -33,8 +33,9 @@ fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 }
 
 pub fn read_source(data: Kalem) -> KalemCodegenStruct {
-    #[allow(dead_code)]
     let mut _tokens: Vec<&str>;
+    let mut is_argument: bool = false;
+
 
     let mut codegen = KalemCodegenStruct {
         kalem_generated: "".to_string(),
@@ -61,6 +62,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         '@' => {
                             if _tokens[i] == format!("@{}", codegen::_KALEM_MAIN) {
                                 kalem_codegen(KalemTokens::KalemMain, &mut codegen, _tokens[i + 1], "");
+                                is_argument = true;
                             }
                             else if _tokens[i] == format!("@{}", codegen::_KALEM_RETURN) {
                                 kalem_codegen(KalemTokens::KalemReturn, &mut codegen, _tokens[i + 1], "");
@@ -116,6 +118,22 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     else {
                                         // Syntax error (string x =)
                                     }
+                                }
+                            }
+                            else if _tokens[i] == codegen::_KALEM_INT
+                                ||  _tokens[i] == codegen::_KALEM_UNSIGNED {
+                                if is_argument == true {
+                                    is_argument = false;
+                                }
+                                else if _tokens[i + 2].chars().next().unwrap() == codegen::EQUAL {
+                                    let x = if _tokens[i] == codegen::_KALEM_INT {
+                                        KalemTokens::KalemInt
+                                    }
+                                    else {
+                                        KalemTokens::KalemUnsigned
+                                    };
+
+                                    kalem_codegen(x, &mut codegen, _tokens[i + 3], _tokens[i + 1]);
                                 }
                             }
                         }

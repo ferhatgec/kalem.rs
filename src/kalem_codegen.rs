@@ -5,18 +5,23 @@
 //
 //
 
-
 #[allow(dead_code)]
 pub mod codegen {
     pub const _KALEM_INT:               &str = "int";
+    pub const _KALEM_UNSIGNED:          &str = "unsign";
     pub const _KALEM_STRING:            &str = "string";
+    pub const _KALEM_CHAR:              &str = "char";
+
     pub const _KALEM_IMPORT:            &str = "import";
     pub const _KALEM_MAIN:              &str = "main";
     pub const _KALEM_RETURN:            &str = "return";
     pub const _KALEM_PRINT:             &str = "print";
 
     pub const _CPP_KALEM_INT:           &str = "int";
+    pub const _CPP_KALEM_UNSIGNED:      &str = "unsigned";
     pub const _CPP_KALEM_STRING:        &str = "string";
+    pub const _CPP_KALEM_CHAR:          &str = "char";
+
     pub const _CPP_KALEM_IMPORT:        &str = "include";
     pub const _CPP_KALEM_MAIN:          &str = "main";
     pub const _CPP_KALEM_RETURN:        &str = "return";
@@ -26,13 +31,17 @@ pub mod codegen {
     pub const RIGHT_CURLY_BRACKET:      char = '}';
 
     pub const SEMICOLON:                char = ';';
+    pub const EQUAL:                    char = '=';
+
     pub const NEWLINE:                  char = '\n';
 }
 
 
 pub enum KalemTokens {
     KalemInt = 0,
+    KalemUnsigned,
     KalemString,
+
     KalemImport,
     KalemMain,
     KalemReturn,
@@ -71,7 +80,32 @@ pub fn kalem_codegen(token: KalemTokens,
                                                   codegen::_CPP_KALEM_STRING,
                                                   variable).as_str());
 
-            if keyword != "" {
+            if !keyword.is_empty() {
+                data.kalem_generated.push_str(keyword);
+            }
+
+            data.kalem_generated.push(codegen::SEMICOLON);
+        },
+        KalemTokens::KalemInt => {
+            data.kalem_generated.push_str(format!("{} {}",
+                                                  codegen::_CPP_KALEM_INT,
+                                                  variable).as_str());
+
+            if !keyword.is_empty() {
+                data.kalem_generated.push(codegen::EQUAL);
+                data.kalem_generated.push_str(keyword);
+            }
+
+            data.kalem_generated.push(codegen::SEMICOLON);
+
+        },
+        KalemTokens::KalemUnsigned => {
+            data.kalem_generated.push_str(format!("{} {}",
+                                                  codegen::_CPP_KALEM_UNSIGNED,
+                                                  variable).as_str());
+
+            if !keyword.is_empty() {
+                data.kalem_generated.push(codegen::EQUAL);
                 data.kalem_generated.push_str(keyword);
             }
 
@@ -101,6 +135,5 @@ pub fn kalem_codegen(token: KalemTokens,
         KalemTokens::KalemNewline => {
             data.kalem_generated.push(codegen::NEWLINE);
         },
-        _ => println!("{}", "What is this?"),
     }
 }
