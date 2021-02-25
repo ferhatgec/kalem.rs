@@ -34,7 +34,10 @@ fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 
 pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut _tokens: Vec<&str>;
+
     let mut is_argument: bool = false;
+    let mut is_main: bool = false;
+
     let mut vec_size;
 
     let mut codegen = KalemCodegenStruct {
@@ -57,7 +60,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                     match _tokens[i].chars().nth(0).unwrap() as char {
                         '#' => {
                             if _tokens[i] == format!("#{}", codegen::_KALEM_IMPORT).as_str() {
-                                kalem_codegen(KalemTokens::KalemImport, &mut codegen, _tokens[i + 1], "");
+                                kalem_codegen(KalemTokens::KalemImport, &mut codegen, _tokens[i + 1], "", "");
                             }
                             else if _tokens[i] == format!("#{}", codegen::_KALEM_DEFINE).as_str() {
                                 if _tokens[i + 2].chars().next().unwrap() == '"' {
@@ -76,24 +79,25 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                         }
                                     }
 
-                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, string_data.as_str(), _tokens[i + 1]);
+                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, string_data.as_str(), _tokens[i + 1], "");
                                 }
                                 else {
-                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, _tokens[i + 2], _tokens[i + 1]);
+                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, _tokens[i + 2], _tokens[i + 1], "");
                                 }
                             }
                         },
                         '@' => {
                             if _tokens[i] == format!("@{}", codegen::_KALEM_MAIN) {
-                                kalem_codegen(KalemTokens::KalemMain, &mut codegen, _tokens[i + 1], "");
+                                kalem_codegen(KalemTokens::KalemMain, &mut codegen, _tokens[i + 1], "", "");
                                 is_argument = true;
+                                is_main = true;
                             }
                             else if _tokens[i] == format!("@{}", codegen::_KALEM_RETURN) {
-                                kalem_codegen(KalemTokens::KalemReturn, &mut codegen, _tokens[i + 1], "");
+                                kalem_codegen(KalemTokens::KalemReturn, &mut codegen, _tokens[i + 1], "", "");
                             }
                             else if _tokens[i] == format!("@{}", codegen::_KALEM_PRINT) {
                                 if _tokens[i + 1].chars().next().unwrap() == '"' {
-                                    let mut string_data: String = String::new();
+                                    let mut string_data = String::new();
                                     let mut f: usize = i + 1;
 
                                     loop {
@@ -108,33 +112,167 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                         }
                                     }
 
-                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, string_data.as_str(), "");
+                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, string_data.as_str(), "", "");
                                 }
                                 else {
-                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, _tokens[i + 1], "");
+                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, _tokens[i + 1], "", "");
                                 }
                             }
                             else {
+                                let mut arguments = String::new();
+                                let mut function_name= String::new();
+
                                 if i + 2 < vec_size {
                                     if _tokens[i + 2].chars().next().unwrap() == codegen::LEFT_CURLY_BRACKET {
                                         if is_argument == false {
-                                            kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1]);
+                                            kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1], "");
                                         }
                                     }
                                     else {
+                                        let mut function_type = String::new();
+
+                                        let mut f: usize = 0;
+
+                                        /*
+                                            @test(string test, int a) void {
+
+                                            }
+                                         */
+
+                                        // TODO: Implement get_element(String, usize, char)
+                                        // Get function name
+                                        loop {
+                                            if f + 1 >= ip.len() {
+                                                // Parse error
+                                                break;
+                                            }
+
+                                            function_name.push(ip.chars().nth(f).unwrap());
+
+                                            if ip.chars().nth(f + 1).unwrap() == '(' {
+                                                f = f + 2;
+                                                break;
+                                            }
+                                            else {
+                                                f = f + 1;
+                                            }
+                                        }
+
+                                        // Get arguments
+                                        loop {
+                                            arguments.push(ip.chars().nth(f).unwrap());
+
+                                            if f + 1 >= ip.len() {
+                                                // Parse error
+                                                break;
+                                            }
+
+                                            if ip.chars().nth(f + 1).unwrap() == ')' {
+                                                f = f + 2;
+
+                                                break;
+                                            }
+                                            else {
+                                                f = f + 1;
+                                            }
+                                        }
+
+                                        if is_main == false {
+                                            loop {
+                                                if f + 1 >= ip.len() {
+                                                    // Parse error
+                                                    break;
+                                                }
+
+                                                function_type.push(ip.chars().nth(f).unwrap());
+
+
+                                                if ip.chars().nth(f + 1).unwrap() == ip.chars()
+                                                                                        .rev()
+                                                                                        .next()
+                                                                                        .unwrap() {
+                                                    break;
+                                                }
+                                                else {
+                                                    f = f + 1;
+                                                }
+                                            }
+                                        }
+
+                                        function_name = function_name.trim().to_string();
+                                        function_type = function_type.trim().to_string();
+
+                                        if is_main == false {
+                                            kalem_codegen(KalemTokens::KalemFunction, &mut codegen, function_name.as_str(), function_type.as_str(), arguments.as_str());
+                                        }
+                                        else if is_main == true && function_type.is_empty() {
+                                            if !arguments.is_empty() {
+                                                // Function call with arguments
+                                                kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, function_name.as_str(), "", arguments.as_str());
+                                            }
+                                            else {
+                                                // Function call without arguments
+                                                kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, function_name.as_str(), "", "");
+                                            }
+                                        }
+
                                         // Function call
-                                        kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, _tokens[i], "");
+                                        //kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, _tokens[i], "");
                                     }
                                 }
                                 else {
-                                    // Function call
-                                    kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, _tokens[i], "");
+                                    let mut f: usize = 0;
+
+                                    // Get function name
+                                    loop {
+                                        function_name.push(ip.chars().nth(f).unwrap());
+
+                                        if f + 1 >= ip.len() {
+                                            // Parse error
+                                            break;
+                                        }
+
+                                        if ip.chars().nth(f + 1).unwrap() == '(' {
+                                            f = f + 2;
+                                            break;
+                                        } else {
+                                            f = f + 1;
+                                        }
+                                    }
+
+                                    // Get arguments
+                                    loop {
+                                        if f + 1 >= ip.len() {
+                                            // Parse error
+                                            break;
+                                        }
+
+                                        arguments.push(ip.chars().nth(f).unwrap());
+
+                                        if ip.chars().nth(f + 1).unwrap() == ')' {
+                                            break;
+                                        }
+                                        else {
+                                            f = f + 1;
+                                        }
+                                    }
+
+                                    function_name = function_name.trim().to_string();
+                                    arguments = arguments.trim_start().to_string();
+
+                                    if !arguments.is_empty() {
+                                        // Function call with arguments
+                                        kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, function_name.as_str(), "", arguments.as_str());
+                                    }
+                                    else {
+                                        kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, function_name.as_str(), "", "");
+                                    }
                                 }
                             }
                         },
                         '/' => if _tokens[i].chars().nth(1).unwrap() == '/' {},
-                        '{' => kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", ""),
-                        '}' => kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", ""),
+                        '{' => kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
+                        '}' => kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", ""),
                         _ => {
                             if _tokens[i] == codegen::_KALEM_STRING {
                                 if _tokens[i + 2].chars().next().unwrap() == '=' {
@@ -154,7 +292,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                             }
                                         }
 
-                                        kalem_codegen(KalemTokens::KalemString, &mut codegen, string_data.as_str(), "");
+                                        kalem_codegen(KalemTokens::KalemString, &mut codegen, string_data.as_str(), "", "");
                                     }
                                     else {
                                         // Syntax error (string x =)
@@ -174,13 +312,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                         KalemTokens::KalemUnsigned
                                     };
 
-                                    kalem_codegen(x, &mut codegen, _tokens[i + 3], _tokens[i + 1]);
+                                    kalem_codegen(x, &mut codegen, _tokens[i + 3], _tokens[i + 1], "");
                                 }
                             }
                         }
                     }
                 }
-                kalem_codegen(KalemTokens::KalemNewline, &mut codegen, "", "");
+                kalem_codegen(KalemTokens::KalemNewline, &mut codegen, "", "", "");
             }
         }
     }

@@ -7,6 +7,21 @@
     @print "Hi, from Kalem function!\n"
 }
 
+@my_arguments(string name, int age) void {
+    @print "Hi, "
+    @print name
+    @print "! | "
+    @print age
+    @print "\n"
+}
+
+@my_arguments_2(string name, string lastname) void {
+    @print name
+    @print ", "
+    @print lastname
+    @print "\n"
+}
+
 @main int {
     string test = "Hello, Kalem!\n"
     int _test = 10
@@ -25,6 +40,10 @@
     @my_function
 
     @print TEST
+
+    @my_arguments("Terry", 19)
+
+    @my_arguments_2("Terry Wilder", "Bach")
 
     @return 0
 }

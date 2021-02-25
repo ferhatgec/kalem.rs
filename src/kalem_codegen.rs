@@ -75,7 +75,8 @@ pub struct KalemCodegenStruct {
 pub fn kalem_codegen(token: KalemTokens,
     data: &mut KalemCodegenStruct,
     keyword: &str,
-    variable: &str) {
+    variable: &str,
+    arguments: &str) {
     match token {
         KalemTokens::KalemImport => {
             let mut _keyword = String::from(keyword);
@@ -128,16 +129,40 @@ pub fn kalem_codegen(token: KalemTokens,
         },
         KalemTokens::KalemFunction => {
             let keyword = keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap();
+            let mut argument      = String::from(arguments);
+
+            if !arguments.is_empty() {
+                argument = argument.replace(codegen::_KALEM_STRING,
+                    format!("std::{}", codegen::_CPP_KALEM_STRING).as_str());
+
+                argument = argument.replace(codegen::_KALEM_UNSIGNED,
+                    codegen::_CPP_KALEM_UNSIGNED);
+
+                argument = format!("({})", argument);
+            }
+            else {
+                argument = "()".to_string();
+            }
 
             // Function arguments are not supported yet.
-            data.kalem_generated.push_str(format!("{} {}()",
+            data.kalem_generated.push_str(format!("{} {}{}",
                                                   variable,
-                                                  keyword).as_str());
+                                                  keyword,
+                                                  argument).as_str());
+
+            drop(argument);
         },
         KalemTokens::KalemFunctionCall => {
             let keyword = keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap();
+            let mut argument = String::from(arguments);
 
-            data.kalem_generated.push_str(format!("{}();", keyword).as_str());
+            if arguments.is_empty() {
+                argument.clear();
+            }
+
+            data.kalem_generated.push_str(format!("{}({});", keyword, argument).as_str());
+
+            drop(argument);
         },
         KalemTokens::KalemMain => {
             data.kalem_generated.push_str(format!("{} {}()",
