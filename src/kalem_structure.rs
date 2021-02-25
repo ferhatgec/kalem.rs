@@ -35,7 +35,7 @@ fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut _tokens: Vec<&str>;
     let mut is_argument: bool = false;
-
+    let mut vec_size;
 
     let mut codegen = KalemCodegenStruct {
         kalem_generated: "".to_string(),
@@ -50,6 +50,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                 }
 
                 let _tokens: Vec<&str> = ip.trim().split(" ").collect();
+
+                vec_size = _tokens.len();
 
                 for i in 0.._tokens.len() {
                     match _tokens[i].chars().nth(0).unwrap() as char {
@@ -88,6 +90,23 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 }
                                 else {
                                     kalem_codegen(KalemTokens::KalemPrint, &mut codegen, _tokens[i + 1], "");
+                                }
+                            }
+                            else {
+                                if i + 2 < vec_size {
+                                    if _tokens[i + 2].chars().next().unwrap() == codegen::LEFT_CURLY_BRACKET {
+                                        if is_argument == false {
+                                            kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1]);
+                                        }
+                                    }
+                                    else {
+                                        // Function call
+                                        kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, _tokens[i], "");
+                                    }
+                                }
+                                else {
+                                    // Function call
+                                    kalem_codegen(KalemTokens::KalemFunctionCall, &mut codegen, _tokens[i], "");
                                 }
                             }
                         },

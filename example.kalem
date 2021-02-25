@@ -1,6 +1,10 @@
 #import <ios>
 #import <stdstr>
 
+@my_function void {
+    @print "Hi, from Kalem function!\n"
+}
+
 @main int {
     string test = "Hello, Kalem!\n"
     int _test = 10
@@ -9,12 +13,14 @@
     @print "String: "
     @print test
 
-    @print "\nInteger: "
+    @print "Integer: "
     @print _test
 
     @print "\nUnsigned integer: "
     @print _test_
     @print "\n"
+
+    @my_function
 
     @return 0
 }
