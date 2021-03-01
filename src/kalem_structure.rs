@@ -124,8 +124,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                                 if i + 2 < vec_size {
                                     if _tokens[i + 2].chars().next().unwrap() == codegen::LEFT_CURLY_BRACKET {
-                                        if is_argument == false {
-                                            kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1], "");
+                                        if is_argument == false && is_main == false {
+                                            if _tokens[i + 1] == codegen::_KALEM_NAMESPACE {
+                                                kalem_codegen(KalemTokens::KalemNamespace, &mut codegen, _tokens[i], _tokens[i + 1], "");
+                                            }
+                                            else {
+                                                kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1], "");
+                                            }
                                         }
                                     }
                                     else {

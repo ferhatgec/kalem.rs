@@ -19,6 +19,8 @@ pub mod codegen {
 
     pub const _KALEM_DEFINE:            &str = "defn";
 
+    pub const _KALEM_NAMESPACE:         &str = "namespace";
+
     pub const _KALEM_VOID:              &str = "void";
 
     pub const _CPP_KALEM_INT:           &str = "int";
@@ -32,6 +34,8 @@ pub mod codegen {
     pub const _CPP_KALEM_PRINT:         &str = "cout";
 
     pub const _CPP_KALEM_DEFINE:        &str = "define";
+
+    pub const _CPP_KALEM_NAMESPACE:     &str = "namespace";
 
     pub const _CPP_KALEM_VOID:          &str = "void";
 
@@ -61,7 +65,8 @@ pub enum KalemTokens {
     KalemFunctionCall,
 
     KalemDefine,
-
+    KalemNamespace,
+    
     KalemLeftCurlyBracket,
     KalemRightCurlyBracket,
 
@@ -168,6 +173,13 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_generated.push_str(format!("{} {}()",
                                                   keyword,
                                                   codegen::_CPP_KALEM_MAIN).as_str());
+        },
+        KalemTokens::KalemNamespace => {
+            let keyword = keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap();
+
+            data.kalem_generated.push_str(format!("{} {}",
+                                                  codegen::_CPP_KALEM_NAMESPACE,
+                                                  keyword).as_str());
         },
         KalemTokens::KalemDefine => {
             data.kalem_generated.push_str(format!("#{} {} {}",

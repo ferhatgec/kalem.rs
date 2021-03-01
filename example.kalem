@@ -3,6 +3,12 @@
 
 #defn TEST "Hi, preprocessor!\n"
 
+@my_namespace namespace {
+    @test void {
+        @print "Hi, from my_namespace!\n"
+    }
+}
+
 @my_function void {
     @print "Hi, from Kalem function!\n"
 }
@@ -44,6 +50,8 @@
     @my_arguments("Terry", 19)
 
     @my_arguments_2("Terry Wilder", "Bach")
+
+    @my_namespace::test
 
     @return 0
 }
