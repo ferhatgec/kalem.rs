@@ -66,7 +66,9 @@ pub enum KalemTokens {
 
     KalemDefine,
     KalemNamespace,
-    
+
+    KalemLink,
+
     KalemLeftCurlyBracket,
     KalemRightCurlyBracket,
 
@@ -180,6 +182,12 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_generated.push_str(format!("{} {}",
                                                   codegen::_CPP_KALEM_NAMESPACE,
                                                   keyword).as_str());
+        },
+        KalemTokens::KalemLink => {
+            // TODO: Create pop_front() function
+            let keyword = keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap();
+
+            data.kalem_generated.push_str(keyword);
         },
         KalemTokens::KalemDefine => {
             data.kalem_generated.push_str(format!("#{} {} {}",

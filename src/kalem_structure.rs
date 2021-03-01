@@ -85,6 +85,10 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     kalem_codegen(KalemTokens::KalemDefine, &mut codegen, _tokens[i + 2], _tokens[i + 1], "");
                                 }
                             }
+                            else {
+                                // To directly use C & C++ code
+                                kalem_codegen(KalemTokens::KalemLink, &mut codegen, ip.trim_start(), "", "");
+                            }
                         },
                         '@' => {
                             if _tokens[i] == format!("@{}", codegen::_KALEM_MAIN) {

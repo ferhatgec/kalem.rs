@@ -53,5 +53,7 @@
 
     @my_namespace::test
 
+    #std::cout << "I am C++ linker huh?\n";
+
     @return 0
 }
