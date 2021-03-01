@@ -42,6 +42,10 @@ pub mod codegen {
     pub const LEFT_CURLY_BRACKET:       char = '{';
     pub const RIGHT_CURLY_BRACKET:      char = '}';
 
+    pub const FUNCTION_NOTATION:        char = '@';
+
+    pub const SLASH:                    char = '/';
+
     pub const POINTER:                  char = '*';
 
     pub const SHARP:                    char = '#';

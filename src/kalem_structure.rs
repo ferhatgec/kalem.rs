@@ -58,7 +58,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                 for i in 0.._tokens.len() {
                     match _tokens[i].chars().nth(0).unwrap() as char {
-                        '#' => {
+                        codegen::SHARP => {
                             if _tokens[i] == format!("#{}", codegen::_KALEM_IMPORT).as_str() {
                                 kalem_codegen(KalemTokens::KalemImport, &mut codegen, _tokens[i + 1], "", "");
                             }
@@ -90,7 +90,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 kalem_codegen(KalemTokens::KalemLink, &mut codegen, ip.trim_start(), "", "");
                             }
                         },
-                        '@' => {
+                        codegen::FUNCTION_NOTATION => {
                             if _tokens[i] == format!("@{}", codegen::_KALEM_MAIN) {
                                 kalem_codegen(KalemTokens::KalemMain, &mut codegen, _tokens[i + 1], "", "");
                                 is_argument = true;
@@ -279,9 +279,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 }
                             }
                         },
-                        '/' => if _tokens[i].chars().nth(1).unwrap() == '/' {},
-                        '{' => kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
-                        '}' => kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", ""),
+                        codegen::SLASH => if _tokens[i].chars().nth(1).unwrap() == '/' {},
+                        codegen::LEFT_CURLY_BRACKET => kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
+                        codegen::RIGHT_CURLY_BRACKET => kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", ""),
                         _ => {
                             if _tokens[i] == codegen::_KALEM_STRING {
                                 if _tokens[i + 2].chars().next().unwrap() == '=' {
