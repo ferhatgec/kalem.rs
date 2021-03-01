@@ -42,6 +42,8 @@ pub mod codegen {
     pub const LEFT_CURLY_BRACKET:       char = '{';
     pub const RIGHT_CURLY_BRACKET:      char = '}';
 
+    pub const POINTER:                  char = '*';
+
     pub const SHARP:                    char = '#';
 
     pub const SEMICOLON:                char = ';';
@@ -50,6 +52,10 @@ pub mod codegen {
     pub const NEWLINE:                  char = '\n';
 }
 
+pub mod append_codegen {
+    pub const _CPP_KALEM_ARGC:          &str = "argc";
+    pub const _CPP_KALEM_ARGV:          &str = "argv";
+}
 
 pub enum KalemTokens {
     KalemInt = 0,
@@ -172,9 +178,14 @@ pub fn kalem_codegen(token: KalemTokens,
             drop(argument);
         },
         KalemTokens::KalemMain => {
-            data.kalem_generated.push_str(format!("{} {}()",
-                                                  keyword,
-                                                  codegen::_CPP_KALEM_MAIN).as_str());
+            data.kalem_generated.push_str(format!("{} {}({} {}, {}** {})",
+                                                  keyword,                          // Type
+                                                  codegen::_CPP_KALEM_MAIN,        // Main
+                                                  codegen::_CPP_KALEM_INT,         // Argument counter type
+                                                  append_codegen::_CPP_KALEM_ARGC, // Argument counter name
+                                                  codegen::_CPP_KALEM_CHAR,        // Argv type
+                                                  append_codegen::_CPP_KALEM_ARGV  // Argv name
+                                                    ).as_str());
         },
         KalemTokens::KalemNamespace => {
             let keyword = keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap();

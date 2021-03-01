@@ -55,5 +55,12 @@
 
     #std::cout << "I am C++ linker huh?\n";
 
+    @print "Argc: "
+    @print argc
+
+    @print "\nargv[argc - 1]: "
+    @print argv[argc-1]
+    @print "\n"
+
     @return 0
 }
