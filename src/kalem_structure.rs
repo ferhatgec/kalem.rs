@@ -42,6 +42,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
     let mut codegen = KalemCodegenStruct {
         kalem_generated: "".to_string(),
+
+        kalem_output: "".to_string(),
+        kalem_cpp_standard: "c++17".to_string(),
     };
 
     if let Ok(lines) = read_lines(data.kalem_filename) {
@@ -278,6 +281,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     }
                                 }
                             }
+                        },
+                        codegen::FLAG_START => {
+                            kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.as_str(), "");
                         },
                         codegen::SLASH => if _tokens[i].chars().nth(1).unwrap() == '/' {},
                         codegen::LEFT_CURLY_BRACKET => kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),

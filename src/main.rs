@@ -95,12 +95,18 @@ fn main() {
         Ok(_) => {},
     }
 
+    let mut output: String = String::from(&filename.replace(".cpp", ""));
+
+    if !codegen.kalem_output.is_empty() {
+        output = codegen.kalem_output;
+    }
+
     let output = Command::new("clang++")
-        .arg("-std=c++17")
+        .arg(format!("-std={}", codegen.kalem_cpp_standard))
         .arg("-lstdc++fs")
         .arg(&filename)
         .arg("-o")
-        .arg(&filename.replace(".cpp", ""))
+        .arg(output)
         .output().unwrap_or_else(|e| {
         panic!("Failed to execute process: {}", e)
     });
@@ -114,4 +120,7 @@ fn main() {
     if Path::new(&filename.replace(".cpp", "")).exists() && option == false {
         fs::remove_file(&filename);
     }
+
+    drop(output);
+    drop(filename);
 }

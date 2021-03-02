@@ -19,5 +19,5 @@ pub fn get_statement_data<'a>(tokens: Vec<&'a str>, i: usize) -> String {
         }
     }
 
-    return string_data;
+    string_data
 }

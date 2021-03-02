@@ -27,6 +27,8 @@ pub mod codegen {
 
     // pub const _KALEM_WHILE:             &str = "while";
 
+    pub const _KALEM_FLAG:              &str = "flag";
+
     pub const _KALEM_VOID:              &str = "void";
 
     pub const _KALEM_VECTOR:            &str = "vect";
@@ -68,6 +70,8 @@ pub mod codegen {
     pub const SEMICOLON:                char = ';';
     pub const EQUAL:                    char = '=';
 
+    pub const FLAG_START:               char = '!';
+
     pub const WHITESPACE:               char = ' ';
 
     pub const NEWLINE:                  char = '\n';
@@ -99,6 +103,8 @@ pub enum KalemTokens {
     KalemElse,
     KalemElseIf,
 
+    KalemFlag,
+
     KalemLink,
 
     KalemLeftCurlyBracket,
@@ -109,6 +115,9 @@ pub enum KalemTokens {
 
 pub struct KalemCodegenStruct {
     pub kalem_generated: String,
+
+    pub kalem_output: String,
+    pub kalem_cpp_standard: String,
 }
 
 pub fn kalem_codegen(token: KalemTokens,
@@ -240,6 +249,41 @@ pub fn kalem_codegen(token: KalemTokens,
                                                   codegen::_CPP_KALEM_ELSE,
                                                   codegen::_CPP_KALEM_IF,
                                                   keyword).as_str());
+        },
+        KalemTokens::KalemFlag => {
+            if variable.len() > 6 {
+                let mut flag_name = String::new();
+                let mut flag_data = String::new();
+
+                let mut is_data: bool = false;
+
+                for ch in variable.chars().skip(6) {
+                    if is_data == true {
+                        if ch == '"' {
+                            break;
+                        }
+
+                        flag_data.push(ch);
+                    } else if ch != '"' {
+                        if ch == '=' {
+                            is_data = true;
+                            continue;
+                        }
+
+                        flag_name.push(ch);
+                    }
+                }
+
+                if flag_name == "output" {
+                    data.kalem_output = flag_data;
+                }
+                else if flag_name == "cpp-standard" {
+                    data.kalem_cpp_standard = flag_data;
+                }
+
+                drop(flag_name);
+                drop(is_data);
+            }
         },
         KalemTokens::KalemLink => {
             // TODO: Create pop_front() function
