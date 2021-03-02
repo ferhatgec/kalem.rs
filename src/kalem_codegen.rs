@@ -233,8 +233,8 @@ pub fn kalem_codegen(token: KalemTokens,
         },
         KalemTokens::KalemElseIf => {
             data.kalem_generated.push_str(format!("{} {}({})",
-                                                  codegen::_CPP_KALEM_IF,
                                                   codegen::_CPP_KALEM_ELSE,
+                                                  codegen::_CPP_KALEM_IF,
                                                   keyword).as_str());
         },
         KalemTokens::KalemLink => {

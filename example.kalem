@@ -65,6 +65,9 @@
     if argc == 1 {
         @print "Where's my argument, sst.\n"
     }
+    elsif argc == 2 {
+        @print "Long time no see, argument!\n"
+    }
     els {
         @print "Nice!\n"
     }

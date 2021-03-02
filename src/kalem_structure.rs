@@ -328,6 +328,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                               "",
                                               "");
                             }
+                            else if _tokens[i] == codegen::_KALEM_ELSE_IF {
+                                kalem_codegen(KalemTokens::KalemElseIf,
+                                              &mut codegen,
+                                              get_statement_data(_tokens.to_vec(), i).as_str(),
+                                              "",
+                                              "");
+                            }
                             else if _tokens[i] == codegen::_KALEM_ELSE {
                                 kalem_codegen(KalemTokens::KalemElse, &mut codegen, "", "", "");
                             }
