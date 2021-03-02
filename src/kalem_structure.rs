@@ -7,6 +7,7 @@
 
 use crate:: {
     kalem_codegen::kalem_codegen,
+    kalem_helpers::get_statement_data,
     Kalem,
 };
 
@@ -21,10 +22,9 @@ use std::path::Path;
 
 use crate::kalem_codegen::{
     KalemCodegenStruct,
-    KalemTokens
+    KalemTokens,
+    codegen
 };
-
-use crate::kalem_codegen::codegen;
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
     where P: AsRef<Path>, {
@@ -288,10 +288,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     if _tokens[i + 3].chars().next().unwrap() == '"' {
                                         let mut string_data: String = String::new();
                                         let mut f: usize = i + 1;
-
                                         loop {
                                             string_data.push_str(_tokens[f]);
-
                                             if _tokens[f].chars().nth(_tokens[f].len() - 1).unwrap() == '"' {
                                                 break;
                                             }
@@ -300,7 +298,6 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                                 f = f + 1;
                                             }
                                         }
-
                                         kalem_codegen(KalemTokens::KalemString, &mut codegen, string_data.as_str(), "", "");
                                     }
                                     else {
@@ -325,23 +322,11 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 }
                             }
                             else if _tokens[i] == codegen::_KALEM_IF {
-                                let mut string_data = String::new();
-                                let mut f: usize = i + 1;
-
-                                loop {
-                                    if _tokens[f].chars().nth(_tokens[f].len() - 1).unwrap() == '{' {
-                                        break;
-                                    }
-                                    else {
-                                        string_data.push_str(_tokens[f]);
-                                        string_data.push(' ');
-                                        f = f + 1;
-                                    }
-                                }
-
-                                kalem_codegen(KalemTokens::KalemIf, &mut codegen, string_data.as_str(), "", "");
-
-                                drop(string_data);
+                                kalem_codegen(KalemTokens::KalemIf,
+                                              &mut codegen,
+                                              get_statement_data(_tokens.to_vec(), i).as_str(),
+                                              "",
+                                              "");
                             }
                             else if _tokens[i] == codegen::_KALEM_ELSE {
                                 kalem_codegen(KalemTokens::KalemElse, &mut codegen, "", "", "");

@@ -20,6 +20,7 @@ use std::fs;
 
 pub mod kalem_codegen;
 pub mod kalem_structure;
+pub mod kalem_helpers;
 
 use kalem_codegen::{
     KalemCodegenStruct,

@@ -23,6 +23,7 @@ pub mod codegen {
 
     pub const _KALEM_IF:                &str = "if";
     pub const _KALEM_ELSE:              &str = "els";
+    pub const _KALEM_ELSE_IF:           &str = "elsif";
 
     // pub const _KALEM_WHILE:             &str = "while";
 
@@ -96,6 +97,7 @@ pub enum KalemTokens {
     KalemIf,
     // KalemWhile,
     KalemElse,
+    KalemElseIf,
 
     KalemLink,
 
@@ -228,6 +230,12 @@ pub fn kalem_codegen(token: KalemTokens,
         KalemTokens::KalemElse => {
             data.kalem_generated.push_str(codegen::_CPP_KALEM_ELSE);
             data.kalem_generated.push(codegen::WHITESPACE);
+        },
+        KalemTokens::KalemElseIf => {
+            data.kalem_generated.push_str(format!("{} {}({})",
+                                                  codegen::_CPP_KALEM_IF,
+                                                  codegen::_CPP_KALEM_ELSE,
+                                                  keyword).as_str());
         },
         KalemTokens::KalemLink => {
             // TODO: Create pop_front() function
