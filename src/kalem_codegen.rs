@@ -121,8 +121,12 @@ pub fn kalem_codegen(token: KalemTokens,
             let mut _keyword = String::from(keyword);
 
             _keyword = _keyword.replace("ios", "iostream");
-
             _keyword = _keyword.replace("stdstr", "string");
+            _keyword = _keyword.replace("vect", "vector");
+            _keyword = _keyword.replace("cstdstr", "cstring");
+            _keyword = _keyword.replace("iom", "iomanip");
+            _keyword = _keyword.replace("filesys", "filesystem");
+            _keyword = _keyword.replace("fst", "fstream");
 
             data.kalem_generated.push_str(format!("#{} {}",
                                                   codegen::_CPP_KALEM_IMPORT,
