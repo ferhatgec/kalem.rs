@@ -1,6 +1,11 @@
 #import <ios>
 #import <stdstr>
 
+// Some of Kalem's runtime flags
+!flag("output=testikebabi")
+!flag("cpp-standard=c++2a")
+
+
 #defn TEST "Hi, preprocessor!\n"
 
 @my_namespace namespace {
