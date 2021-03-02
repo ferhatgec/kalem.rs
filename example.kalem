@@ -62,5 +62,12 @@
     @print argv[argc-1]
     @print "\n"
 
+    if argc == 1 {
+        @print "Where's my argument, sst.\n"
+    }
+    els {
+        @print "Nice!\n"
+    }
+
     @return 0
 }

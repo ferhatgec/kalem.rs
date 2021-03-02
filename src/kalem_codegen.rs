@@ -21,6 +21,11 @@ pub mod codegen {
 
     pub const _KALEM_NAMESPACE:         &str = "namespace";
 
+    pub const _KALEM_IF:                &str = "if";
+    pub const _KALEM_ELSE:              &str = "els";
+
+    // pub const _KALEM_WHILE:             &str = "while";
+
     pub const _KALEM_VOID:              &str = "void";
 
     pub const _KALEM_VECTOR:            &str = "vect";
@@ -39,6 +44,11 @@ pub mod codegen {
 
     pub const _CPP_KALEM_NAMESPACE:     &str = "namespace";
 
+    pub const _CPP_KALEM_IF:            &str = "if";
+    pub const _CPP_KALEM_ELSE:          &str = "else";
+
+    // pub const _CPP_KALEM_WHILE:         &str = "while";
+
     pub const _CPP_KALEM_VOID:          &str = "void";
 
     pub const _CPP_KALEM_VECTOR:        &str = "vector";
@@ -56,6 +66,8 @@ pub mod codegen {
 
     pub const SEMICOLON:                char = ';';
     pub const EQUAL:                    char = '=';
+
+    pub const WHITESPACE:               char = ' ';
 
     pub const NEWLINE:                  char = '\n';
 }
@@ -80,6 +92,10 @@ pub enum KalemTokens {
 
     KalemDefine,
     KalemNamespace,
+
+    KalemIf,
+    // KalemWhile,
+    KalemElse,
 
     KalemLink,
 
@@ -204,6 +220,14 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_generated.push_str(format!("{} {}",
                                                   codegen::_CPP_KALEM_NAMESPACE,
                                                   keyword).as_str());
+        },
+        KalemTokens::KalemIf => {
+            data.kalem_generated.push_str(codegen::_CPP_KALEM_IF);
+            data.kalem_generated.push_str(format!("({})", keyword).as_str());
+        },
+        KalemTokens::KalemElse => {
+            data.kalem_generated.push_str(codegen::_CPP_KALEM_ELSE);
+            data.kalem_generated.push(codegen::WHITESPACE);
         },
         KalemTokens::KalemLink => {
             // TODO: Create pop_front() function

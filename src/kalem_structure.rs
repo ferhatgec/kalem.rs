@@ -324,6 +324,28 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     kalem_codegen(x, &mut codegen, _tokens[i + 3], _tokens[i + 1], "");
                                 }
                             }
+                            else if _tokens[i] == codegen::_KALEM_IF {
+                                let mut string_data = String::new();
+                                let mut f: usize = i + 1;
+
+                                loop {
+                                    if _tokens[f].chars().nth(_tokens[f].len() - 1).unwrap() == '{' {
+                                        break;
+                                    }
+                                    else {
+                                        string_data.push_str(_tokens[f]);
+                                        string_data.push(' ');
+                                        f = f + 1;
+                                    }
+                                }
+
+                                kalem_codegen(KalemTokens::KalemIf, &mut codegen, string_data.as_str(), "", "");
+
+                                drop(string_data);
+                            }
+                            else if _tokens[i] == codegen::_KALEM_ELSE {
+                                kalem_codegen(KalemTokens::KalemElse, &mut codegen, "", "", "");
+                            }
                         }
                     }
                 }
