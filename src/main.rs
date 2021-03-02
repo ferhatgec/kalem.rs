@@ -96,6 +96,7 @@ fn main() {
 
     let output = Command::new("clang++")
         .arg("-std=c++17")
+        .arg("-lstdc++fs")
         .arg(&filename)
         .arg("-o")
         .arg(&filename.replace(".cpp", ""))

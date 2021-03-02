@@ -23,6 +23,8 @@ pub mod codegen {
 
     pub const _KALEM_VOID:              &str = "void";
 
+    pub const _KALEM_VECTOR:            &str = "vect";
+
     pub const _CPP_KALEM_INT:           &str = "int";
     pub const _CPP_KALEM_UNSIGNED:      &str = "unsigned";
     pub const _CPP_KALEM_STRING:        &str = "string";
@@ -38,6 +40,8 @@ pub mod codegen {
     pub const _CPP_KALEM_NAMESPACE:     &str = "namespace";
 
     pub const _CPP_KALEM_VOID:          &str = "void";
+
+    pub const _CPP_KALEM_VECTOR:        &str = "vector";
 
     pub const LEFT_CURLY_BRACKET:       char = '{';
     pub const RIGHT_CURLY_BRACKET:      char = '}';
@@ -154,6 +158,9 @@ pub fn kalem_codegen(token: KalemTokens,
 
                 argument = argument.replace(codegen::_KALEM_UNSIGNED,
                     codegen::_CPP_KALEM_UNSIGNED);
+
+                argument = argument.replace(codegen::_KALEM_VECTOR,
+                    codegen::_CPP_KALEM_VECTOR);
 
                 argument = format!("({})", argument);
             }
