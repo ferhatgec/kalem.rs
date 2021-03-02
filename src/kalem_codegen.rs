@@ -29,6 +29,8 @@ pub mod codegen {
 
     pub const _KALEM_FLAG:              &str = "flag";
 
+    pub const _KALEM_LOOP:              &str = "loop";
+
     pub const _KALEM_VOID:              &str = "void";
 
     pub const _KALEM_VECTOR:            &str = "vect";
@@ -51,6 +53,8 @@ pub mod codegen {
     pub const _CPP_KALEM_ELSE:          &str = "else";
 
     // pub const _CPP_KALEM_WHILE:         &str = "while";
+
+    pub const _CPP_KALEM_LOOP:          &str = "while";
 
     pub const _CPP_KALEM_VOID:          &str = "void";
 
@@ -104,6 +108,8 @@ pub enum KalemTokens {
     KalemElseIf,
 
     KalemFlag,
+
+    KalemLoop,
 
     KalemLink,
 
@@ -284,6 +290,12 @@ pub fn kalem_codegen(token: KalemTokens,
                 drop(flag_name);
                 drop(is_data);
             }
+        },
+        KalemTokens::KalemLoop => {
+            // 'loop' does not support arguments yet.
+            data.kalem_generated.push_str(format!("{}({})",
+                                                  codegen::_CPP_KALEM_LOOP,
+                                                  "1").as_str());
         },
         KalemTokens::KalemLink => {
             // TODO: Create pop_front() function

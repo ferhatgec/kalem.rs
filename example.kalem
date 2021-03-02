@@ -77,5 +77,16 @@
         @print "Nice!\n"
     }
 
+    int i = 0
+
+    loop {
+        @print "Hello, world!\n"
+        #i++;
+
+        if i == 2 {
+            #break;
+        }
+    }
+
     @return 0
 }

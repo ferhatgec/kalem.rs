@@ -344,6 +344,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             else if _tokens[i] == codegen::_KALEM_ELSE {
                                 kalem_codegen(KalemTokens::KalemElse, &mut codegen, "", "", "");
                             }
+                            else if _tokens[i] == codegen::_KALEM_LOOP {
+                                kalem_codegen(KalemTokens::KalemLoop, &mut codegen, "", "", "");
+                            }
                         }
                     }
                 }
