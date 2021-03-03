@@ -31,6 +31,9 @@ pub mod codegen {
 
     pub const _KALEM_LOOP:              &str = "loop";
 
+    pub const _KALEM_CONTINUE:          &str = "continue";
+    pub const _KALEM_BREAK:             &str = "break";
+
     pub const _KALEM_VOID:              &str = "void";
 
     pub const _KALEM_VECTOR:            &str = "vect";
@@ -55,6 +58,9 @@ pub mod codegen {
     // pub const _CPP_KALEM_WHILE:         &str = "while";
 
     pub const _CPP_KALEM_LOOP:          &str = "while";
+
+    pub const _CPP_KALEM_CONTINUE:      &str = "continue";
+    pub const _CPP_KALEM_BREAK:         &str = "break";
 
     pub const _CPP_KALEM_VOID:          &str = "void";
 
@@ -110,6 +116,9 @@ pub enum KalemTokens {
     KalemFlag,
 
     KalemLoop,
+
+    KalemContinue,
+    KalemBreak,
 
     KalemLink,
 
@@ -296,6 +305,12 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_generated.push_str(format!("{}({})",
                                                   codegen::_CPP_KALEM_LOOP,
                                                   "1").as_str());
+        },
+        KalemTokens::KalemContinue => {
+            data.kalem_generated.push_str(format!("{};", codegen::_CPP_KALEM_CONTINUE).as_str());
+        },
+        KalemTokens::KalemBreak => {
+            data.kalem_generated.push_str(format!("{};", codegen::_CPP_KALEM_BREAK).as_str());
         },
         KalemTokens::KalemLink => {
             // TODO: Create pop_front() function

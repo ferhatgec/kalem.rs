@@ -347,6 +347,12 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             else if _tokens[i] == codegen::_KALEM_LOOP {
                                 kalem_codegen(KalemTokens::KalemLoop, &mut codegen, "", "", "");
                             }
+                            else if _tokens[i] == codegen::_KALEM_CONTINUE {
+                                kalem_codegen(KalemTokens::KalemContinue, &mut codegen, "", "", "");
+                            }
+                            else if _tokens[i] == codegen::_KALEM_BREAK {
+                                kalem_codegen(KalemTokens::KalemBreak, &mut codegen, "", "", "");
+                            }
                         }
                     }
                 }
