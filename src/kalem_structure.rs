@@ -45,6 +45,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
         kalem_output: "".to_string(),
         kalem_cpp_standard: "c++17".to_string(),
+        kalem_cpp_output: false,
     };
 
     if let Ok(lines) = read_lines(data.kalem_filename) {

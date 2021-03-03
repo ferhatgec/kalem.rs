@@ -117,7 +117,9 @@ fn main() {
         print!("[Error] : \n{}", _s);
     }
 
-    if Path::new(&filename.replace(".cpp", "")).exists() && option == false {
+    if Path::new(&filename.replace(".cpp", "")).exists()
+        && option == false
+        && codegen.kalem_cpp_output == false {
         fs::remove_file(&filename);
     }
 

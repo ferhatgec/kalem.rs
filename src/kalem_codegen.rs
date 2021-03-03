@@ -135,6 +135,8 @@ pub struct KalemCodegenStruct {
 
     pub kalem_output: String,
     pub kalem_cpp_standard: String,
+
+    pub kalem_cpp_output: bool,
 }
 
 pub fn kalem_codegen(token: KalemTokens,
@@ -296,6 +298,14 @@ pub fn kalem_codegen(token: KalemTokens,
                 }
                 else if flag_name == "cpp-standard" {
                     data.kalem_cpp_standard = flag_data;
+                }
+                else if flag_name == "cpp-output" {
+                    if flag_data == "true" {
+                        data.kalem_cpp_output = true;
+                    }
+                    else {
+                        data.kalem_cpp_output = false;
+                    }
                 }
 
                 drop(flag_name);

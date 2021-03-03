@@ -4,7 +4,7 @@
 // Some of Kalem's runtime flags
 !flag("output=testikebabi")
 !flag("cpp-standard=c++2a")
-
+!flag("cpp-output=false")
 
 #defn TEST "Hi, preprocessor!\n"
 
