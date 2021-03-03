@@ -49,6 +49,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
         kalem_cpp_flags: "-lstdc++fs".to_string(),
         kalem_cpp_dirs: "".to_string(),
 
+        kalem_source_files: vec![],
+
         kalem_cpp_output: false,
     };
 
@@ -293,6 +295,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         codegen::FLAG_START => {
                             if ip.contains(format!("!{}", codegen::_KALEM_FLAG).as_str()) {
                                 kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.as_str(), "");
+                            }
+                            else if ip.contains(format!("!{}", codegen::_KALEM_ADD_SOURCE).as_str()) {
+                                kalem_codegen(KalemTokens::KalemAddSource, &mut codegen, "", ip.as_str(), "");
                             }
                             else if ip.contains(format!("!{}", codegen::_KALEM_INCLUDE_DIR).as_str()) {
                                 kalem_codegen(KalemTokens::KalemIncludeDir, &mut codegen, "", ip.as_str(), "");

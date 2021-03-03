@@ -12,7 +12,11 @@
 !include_dir("./cpplib/")
 !include_dir("./")
 
+!add_source("test")
+
 #import <StringTools.hpp>
+
+#import <test.kalem>
 
 #defn TEST "Hi, preprocessor!\n"
 
@@ -99,6 +103,8 @@
     @print "StringTools: "
     @print stringtools::GetBetweenString(test,"[","]")
     @print "\n"
+
+    @my_test
 
     @return 0
 }

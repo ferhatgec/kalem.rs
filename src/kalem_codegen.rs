@@ -34,6 +34,7 @@ pub mod codegen {
 
     pub const _KALEM_FLAG:              &str = "flag";
     pub const _KALEM_INCLUDE_DIR:       &str = "include_dir";
+    pub const _KALEM_ADD_SOURCE:        &str = "add_source";
 
     pub const _KALEM_LOOP:              &str = "loop";
 
@@ -121,6 +122,7 @@ pub enum KalemTokens {
 
     KalemFlag,
     KalemIncludeDir,
+    KalemAddSource,
 
     KalemLoop,
 
@@ -146,6 +148,8 @@ pub struct KalemCodegenStruct {
     pub kalem_cpp_flags:    String,
     pub kalem_cpp_dirs:     String,
 
+    pub kalem_source_files: Vec<String>,
+
     pub kalem_cpp_output: bool,
 }
 
@@ -165,6 +169,7 @@ pub fn kalem_codegen(token: KalemTokens,
             _keyword = _keyword.replace("iom", "iomanip");
             _keyword = _keyword.replace("filesys", "filesystem");
             _keyword = _keyword.replace("fst", "fstream");
+            _keyword = _keyword.replace(".kalem", ".hpp");
 
             data.kalem_generated.push_str(format!("#{} {}",
                                                   codegen::_CPP_KALEM_IMPORT,
@@ -317,6 +322,11 @@ pub fn kalem_codegen(token: KalemTokens,
             else {
                 data.kalem_cpp_dirs = "".to_string();
             }
+        },
+        KalemTokens::KalemAddSource => {
+            let source_data = get_include_dir_data(variable, 13);
+
+            data.kalem_source_files.push(source_data);
         },
         KalemTokens::KalemLoop => {
             // 'loop' does not support arguments yet.

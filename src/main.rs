@@ -66,8 +66,8 @@ fn main() {
 
     // file = args[1].replace(".kalem", "");
 
-    let mut option: bool= false;
-    let data: Kalem;
+    let mut option: bool = false;
+    let mut data: Kalem;
 
     if &args[1] == "--cpp" && args.len() > 2 {
         data = init(&args[2]);
@@ -80,6 +80,7 @@ fn main() {
     let filename = data.kalem_filename.clone().replace(".kalem", ".cpp");
 
     let codegen: KalemCodegenStruct = read_source(data);
+    let mut temp_codegen: KalemCodegenStruct;
 
     let path = Path::new(&filename);
 
@@ -99,6 +100,35 @@ fn main() {
 
     if !codegen.kalem_output.is_empty() {
         output = codegen.kalem_output;
+    }
+
+    for i in 0..codegen.kalem_source_files.len() {
+        data = init(&format!("{}.kalem", codegen.kalem_source_files[i]).to_string());
+
+        temp_codegen = read_source(data);
+
+        if Path::new(format!("{}.hpp", codegen.kalem_source_files[i]).as_str()).exists() {
+            fs::remove_file(format!("{}.hpp", codegen.kalem_source_files[i]).as_str());
+        }
+
+        // TODO: Create simple log function implementation (success, failed, warning)
+        let mut file = match File::create(&Path::new(&format!("{}.hpp", codegen.kalem_source_files[i]))) {
+            Err(why) => panic!("Couldn't create {}: {}", display, why),
+            Ok(file) => file,
+        };
+
+        match file.write_all(temp_codegen.kalem_generated.as_bytes()) {
+            Err(why) => {
+                panic!("Couldn't write to {}: {}",
+                       format!("{}.hpp", codegen.kalem_source_files[i]),
+                       why)
+            },
+            Ok(_) => {
+                println!("Successfully wrote {} -> {}",
+                         format!("{}.kalem", codegen.kalem_source_files[i]),
+                         format!("{}.hpp", codegen.kalem_source_files[i]))
+            },
+        }
     }
 
     let output = Command::new("clang++")
