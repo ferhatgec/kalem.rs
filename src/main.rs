@@ -103,7 +103,7 @@ fn main() {
 
     let output = Command::new("clang++")
         .arg(format!("-std={}", codegen.kalem_cpp_standard))
-        .arg("-lstdc++fs")
+        .arg(codegen.kalem_cpp_flags)
         .arg(&filename)
         .arg("-o")
         .arg(output)

@@ -44,7 +44,10 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
         kalem_generated: "".to_string(),
 
         kalem_output: "".to_string(),
+
         kalem_cpp_standard: "c++17".to_string(),
+        kalem_cpp_flags: "-lstdc++fs".to_string(),
+
         kalem_cpp_output: false,
     };
 

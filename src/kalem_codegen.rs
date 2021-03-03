@@ -131,10 +131,12 @@ pub enum KalemTokens {
 }
 
 pub struct KalemCodegenStruct {
-    pub kalem_generated: String,
+    pub kalem_generated:    String,
 
-    pub kalem_output: String,
+    pub kalem_output:       String,
+
     pub kalem_cpp_standard: String,
+    pub kalem_cpp_flags:    String,
 
     pub kalem_cpp_output: bool,
 }
@@ -305,6 +307,11 @@ pub fn kalem_codegen(token: KalemTokens,
                     }
                     else {
                         data.kalem_cpp_output = false;
+                    }
+                }
+                else if flag_name == "cpp-flags" {
+                    if flag_data != "false" {
+                        data.kalem_cpp_flags = flag_data;
                     }
                 }
 
