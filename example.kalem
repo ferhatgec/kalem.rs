@@ -16,7 +16,7 @@
 
 #import <StringTools.hpp>
 
-#import <test.kalem>
+#include <test>
 
 #defn TEST "Hi, preprocessor!\n"
 

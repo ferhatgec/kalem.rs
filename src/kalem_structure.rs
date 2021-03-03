@@ -72,6 +72,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             if _tokens[i] == format!("#{}", codegen::_KALEM_IMPORT).as_str() {
                                 kalem_codegen(KalemTokens::KalemImport, &mut codegen, _tokens[i + 1], "", "");
                             }
+                            else if _tokens[i] == format!("#{}", codegen::_KALEM_INCLUDE).as_str() {
+                                kalem_codegen(KalemTokens::KalemInclude, &mut codegen, _tokens[i + 1], "", "");
+                            }
                             else if _tokens[i] == format!("#{}", codegen::_KALEM_DEFINE).as_str() {
                                 if _tokens[i + 2].chars().next().unwrap() == '"' {
                                     let mut string_data: String = String::new();

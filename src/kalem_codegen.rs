@@ -18,6 +18,8 @@ pub mod codegen {
     pub const _KALEM_CHAR:              &str = "char";
 
     pub const _KALEM_IMPORT:            &str = "import";
+    pub const _KALEM_INCLUDE:           &str = "include";
+
     pub const _KALEM_MAIN:              &str = "main";
     pub const _KALEM_RETURN:            &str = "return";
     pub const _KALEM_PRINT:             &str = "print";
@@ -51,6 +53,7 @@ pub mod codegen {
     pub const _CPP_KALEM_CHAR:          &str = "char";
 
     pub const _CPP_KALEM_IMPORT:        &str = "include";
+
     pub const _CPP_KALEM_MAIN:          &str = "main";
     pub const _CPP_KALEM_RETURN:        &str = "return";
     pub const _CPP_KALEM_PRINT:         &str = "cout";
@@ -105,6 +108,8 @@ pub enum KalemTokens {
     KalemString,
 
     KalemImport,
+    KalemInclude,
+
     KalemMain,
     KalemReturn,
     KalemPrint,
@@ -170,6 +175,25 @@ pub fn kalem_codegen(token: KalemTokens,
             _keyword = _keyword.replace("filesys", "filesystem");
             _keyword = _keyword.replace("fst", "fstream");
             _keyword = _keyword.replace(".kalem", ".hpp");
+
+            data.kalem_generated.push_str(format!("#{} {}",
+                                                  codegen::_CPP_KALEM_IMPORT,
+                                                  _keyword).as_str());
+
+            drop(_keyword);
+        },
+        KalemTokens::KalemInclude => {
+            let mut _keyword = String::from(keyword);
+
+            if keyword.contains(".kalem") {
+                _keyword = _keyword.replace(".kalem", ".hpp");
+            }
+            else {
+                _keyword.pop();
+
+                _keyword.push_str(".hpp");
+                _keyword.push(keyword.chars().last().unwrap());
+            }
 
             data.kalem_generated.push_str(format!("#{} {}",
                                                   codegen::_CPP_KALEM_IMPORT,
