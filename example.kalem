@@ -10,6 +10,7 @@
 !flag("cpp-flags=false")
 
 !include_dir("./cpplib/")
+!include_dir("./")
 
 #import <StringTools.hpp>
 
