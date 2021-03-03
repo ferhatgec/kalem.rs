@@ -126,6 +126,8 @@ pub enum KalemTokens {
     KalemRightCurlyBracket,
 
     KalemNewline,
+
+    KalemUndefined,
 }
 
 pub struct KalemCodegenStruct {
@@ -342,6 +344,9 @@ pub fn kalem_codegen(token: KalemTokens,
         },
         KalemTokens::KalemNewline => {
             data.kalem_generated.push(codegen::NEWLINE);
+        },
+        KalemTokens::KalemUndefined => {
+            data.kalem_generated.push_str(format!("{};", variable).as_str());
         },
     }
 }

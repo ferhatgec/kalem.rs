@@ -81,7 +81,7 @@
 
     loop {
         @print "Hello, world!\n"
-        #i++;
+        ++i
 
         if i == 2 {
             break

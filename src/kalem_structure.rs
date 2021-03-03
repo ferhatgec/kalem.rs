@@ -91,6 +91,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             else {
                                 // To directly use C & C++ code
                                 kalem_codegen(KalemTokens::KalemLink, &mut codegen, ip.trim_start(), "", "");
+                                break;
                             }
                         },
                         codegen::FUNCTION_NOTATION => {
@@ -124,6 +125,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 else {
                                     kalem_codegen(KalemTokens::KalemPrint, &mut codegen, _tokens[i + 1], "", "");
                                 }
+
+                                break;
                             }
                             else {
                                 let mut arguments = String::new();
@@ -352,6 +355,16 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                             else if _tokens[i] == codegen::_KALEM_BREAK {
                                 kalem_codegen(KalemTokens::KalemBreak, &mut codegen, "", "", "");
+                            }
+                            else if _tokens[i].len() > 1 && ((_tokens[i].chars().last().unwrap() == '+'
+                                    && _tokens[i].chars().nth_back(1).unwrap() == '+')
+                                || (_tokens[i].chars().last().unwrap() == '-'
+                                    && _tokens[i].chars().nth_back(1).unwrap() == '-')
+                                || (_tokens[i].chars().next().unwrap() == '+'
+                                    && _tokens[i].chars().nth(1).unwrap() == '+')
+                                || (_tokens[i].chars().next().unwrap() == '-'
+                                    && _tokens[i].chars().nth(1).unwrap() == '-')) {
+                                kalem_codegen(KalemTokens::KalemUndefined, &mut codegen, "", _tokens[i], "");
                             }
                         }
                     }
