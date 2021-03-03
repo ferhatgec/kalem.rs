@@ -9,6 +9,10 @@
 // Its type is not boolean.
 !flag("cpp-flags=false")
 
+!include_dir("./cpplib/")
+
+#import <StringTools.hpp>
+
 #defn TEST "Hi, preprocessor!\n"
 
 @my_namespace namespace {
@@ -37,7 +41,7 @@
 }
 
 @main int {
-    string test = "Hello, Kalem!\n"
+    string test = "[Hello, Kalem!]\n"
     int _test = 10
     unsign _test_ = 20
 
@@ -90,6 +94,10 @@
             break
         }
     }
+
+    @print "StringTools: "
+    @print stringtools::GetBetweenString(test,"[","]")
+    @print "\n"
 
     @return 0
 }

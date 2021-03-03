@@ -103,6 +103,7 @@ fn main() {
 
     let output = Command::new("clang++")
         .arg(format!("-std={}", codegen.kalem_cpp_standard))
+        .arg(codegen.kalem_cpp_dirs.trim_end())
         .arg(codegen.kalem_cpp_flags)
         .arg(&filename)
         .arg("-o")
@@ -110,6 +111,7 @@ fn main() {
         .output().unwrap_or_else(|e| {
         panic!("Failed to execute process: {}", e)
     });
+
 
     if !output.status.success() {
         let _s = String::from_utf8_lossy(&output.stderr);

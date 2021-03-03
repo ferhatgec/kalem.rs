@@ -5,6 +5,11 @@
 //
 //
 
+use crate::kalem_helpers::{
+    get_flag_data,
+    get_include_dir_data
+};
+
 #[allow(dead_code)]
 pub mod codegen {
     pub const _KALEM_INT:               &str = "int";
@@ -28,6 +33,7 @@ pub mod codegen {
     // pub const _KALEM_WHILE:             &str = "while";
 
     pub const _KALEM_FLAG:              &str = "flag";
+    pub const _KALEM_INCLUDE_DIR:       &str = "include_dir";
 
     pub const _KALEM_LOOP:              &str = "loop";
 
@@ -114,6 +120,7 @@ pub enum KalemTokens {
     KalemElseIf,
 
     KalemFlag,
+    KalemIncludeDir,
 
     KalemLoop,
 
@@ -137,6 +144,7 @@ pub struct KalemCodegenStruct {
 
     pub kalem_cpp_standard: String,
     pub kalem_cpp_flags:    String,
+    pub kalem_cpp_dirs:     String,
 
     pub kalem_cpp_output: bool,
 }
@@ -273,27 +281,7 @@ pub fn kalem_codegen(token: KalemTokens,
         },
         KalemTokens::KalemFlag => {
             if variable.len() > 6 {
-                let mut flag_name = String::new();
-                let mut flag_data = String::new();
-
-                let mut is_data: bool = false;
-
-                for ch in variable.chars().skip(6) {
-                    if is_data == true {
-                        if ch == '"' {
-                            break;
-                        }
-
-                        flag_data.push(ch);
-                    } else if ch != '"' {
-                        if ch == '=' {
-                            is_data = true;
-                            continue;
-                        }
-
-                        flag_name.push(ch);
-                    }
-                }
+                let (flag_name, flag_data) = get_flag_data(variable, 6);
 
                 if flag_name == "output" {
                     data.kalem_output = flag_data;
@@ -316,7 +304,18 @@ pub fn kalem_codegen(token: KalemTokens,
                 }
 
                 drop(flag_name);
-                drop(is_data);
+            }
+        },
+        KalemTokens::KalemIncludeDir => {
+            // 14 = 1 + _KALEM_INCLUDE_DIR + 2
+            let flag_data = get_include_dir_data(variable, 14);
+
+            // TODO: Throw error if directory is not exist.
+            if flag_data != "false" {
+                data.kalem_cpp_dirs.push_str(format!("-I{} ", flag_data).as_str());
+            }
+            else {
+                data.kalem_cpp_dirs = "".to_string();
             }
         },
         KalemTokens::KalemLoop => {

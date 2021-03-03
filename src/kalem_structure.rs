@@ -8,7 +8,7 @@
 use crate:: {
     kalem_codegen::kalem_codegen,
     kalem_helpers::get_statement_data,
-    Kalem,
+    Kalem
 };
 
 use std::fs::File;
@@ -47,6 +47,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
         kalem_cpp_standard: "c++17".to_string(),
         kalem_cpp_flags: "-lstdc++fs".to_string(),
+        kalem_cpp_dirs: "".to_string(),
 
         kalem_cpp_output: false,
     };
@@ -290,7 +291,12 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                         },
                         codegen::FLAG_START => {
-                            kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.as_str(), "");
+                            if ip.contains(format!("!{}", codegen::_KALEM_FLAG).as_str()) {
+                                kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.as_str(), "");
+                            }
+                            else if ip.contains(format!("!{}", codegen::_KALEM_INCLUDE_DIR).as_str()) {
+                                kalem_codegen(KalemTokens::KalemIncludeDir, &mut codegen, "", ip.as_str(), "");
+                            }
                         },
                         codegen::SLASH => if _tokens[i].chars().nth(1).unwrap() == '/' {},
                         codegen::LEFT_CURLY_BRACKET => kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
