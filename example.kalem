@@ -4,7 +4,7 @@
 // Some of Kalem's runtime flags
 !flag("output=testikebabi")
 !flag("cpp-standard=c++2a")
-!flag("cpp-output=false")
+!flag("cpp-output=true")
 !flag("cpp-sysroot=false")
 
 // default=clang
@@ -50,9 +50,9 @@
 }
 
 @main int {
-    string test = "[Hello, Kalem!]\n"
-    int _test = 10
-    unsign _test_ = 20
+    string test "[Hello, Kalem!]\n"
+    int _test 10
+    unsign _test_ 20
 
     @print "String: "
     @print test
@@ -93,7 +93,7 @@
         @print "Nice!\n"
     }
 
-    int i = 0
+    int i 0
 
     loop {
         @print "Hello, world!\n"

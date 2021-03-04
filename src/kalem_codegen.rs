@@ -106,6 +106,7 @@ pub enum KalemTokens {
     KalemInt = 0,
     KalemUnsigned,
     KalemString,
+    KalemChar,
 
     KalemImport,
     KalemInclude,
@@ -209,7 +210,22 @@ pub fn kalem_codegen(token: KalemTokens,
                                                   variable).as_str());
 
             if !keyword.is_empty() {
-                data.kalem_generated.push_str(keyword);
+                data.kalem_generated.push_str(format!("{} {}",
+                                                      codegen::EQUAL,
+                                                      keyword).as_str());
+            }
+
+            data.kalem_generated.push(codegen::SEMICOLON);
+        },
+        KalemTokens::KalemChar => {
+            data.kalem_generated.push_str(format!("{} {}",
+                                                  codegen::_CPP_KALEM_CHAR,
+                                                  variable).as_str());
+
+            if !keyword.is_empty() {
+                data.kalem_generated.push_str(format!("{} {}",
+                                                      codegen::EQUAL,
+                                                      keyword).as_str());
             }
 
             data.kalem_generated.push(codegen::SEMICOLON);
