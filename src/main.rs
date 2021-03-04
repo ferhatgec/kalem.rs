@@ -35,6 +35,7 @@ pub struct Kalem {
     pub kalem_filedata: String,
 }
 
+const KALEM_VERSION: &str = "0.1";
 
 fn init(_kalem_filename: &String) -> Kalem {
     let data = fs::read_to_string(_kalem_filename).expect("Unable to read file");
@@ -52,8 +53,9 @@ fn main() {
     let args: Vec<_> = env::args().collect();
 
     if args.len() < 2 {
-        println!("{}\n{} {} [options] file...\n{}\n{}",
-                 "Fegeya Kalem compiler\n",
+        println!("{} - {}\n---\n{} {} [options] file...\n{}\n{}",
+                 "Fegeya Kalem compiler",
+                 KALEM_VERSION,
                  "Usage:",
                  args[0],
                  "Options:",
