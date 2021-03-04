@@ -108,7 +108,8 @@ fn main() {
         temp_codegen = read_source(data);
 
         if Path::new(format!("{}.hpp", codegen.kalem_source_files[i]).as_str()).exists() {
-            fs::remove_file(format!("{}.hpp", codegen.kalem_source_files[i]).as_str());
+            fs::remove_file(format!("{}.hpp", codegen.kalem_source_files[i]).as_str())
+                .expect(format!("Could not remove file '{}'", codegen.kalem_source_files[i]).as_str());
         }
 
         // TODO: Create simple log function implementation (success, failed, warning)
@@ -131,7 +132,7 @@ fn main() {
         }
     }
 
-    let output = Command::new("clang++")
+    let output = Command::new(codegen.kalem_cpp_compiler)
         .arg(format!("-std={}", codegen.kalem_cpp_standard))
         .args(codegen.kalem_cpp_dirs.split(" "))
         .arg(codegen.kalem_cpp_flags)
@@ -152,7 +153,8 @@ fn main() {
     if Path::new(&filename.replace(".cpp", "")).exists()
         && option == false
         && codegen.kalem_cpp_output == false {
-        fs::remove_file(&filename);
+        fs::remove_file(&filename)
+            .expect(format!("Could not remove file '{}'", &filename).as_str());
     }
 
     drop(output);
