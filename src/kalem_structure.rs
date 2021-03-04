@@ -36,7 +36,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut _tokens: Vec<&str>;
 
     let mut is_argument: bool = false;
-    let mut is_main: bool = false;
+    let mut is_main:     bool = false;
+    let mut is_class:    bool = false;
+    let mut is_function: bool = false;
 
     let mut vec_size;
 
@@ -151,8 +153,14 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                             if _tokens[i + 1] == codegen::_KALEM_NAMESPACE {
                                                 kalem_codegen(KalemTokens::KalemNamespace, &mut codegen, _tokens[i], _tokens[i + 1], "");
                                             }
+                                            else if _tokens[i + 1] == codegen::_KALEM_CLASS {
+                                                kalem_codegen(KalemTokens::KalemClass, &mut codegen, _tokens[i], "", "");
+
+                                                is_class = true;
+                                            }
                                             else {
                                                 kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1], "");
+                                                is_function = true;
                                             }
                                         }
                                     }
@@ -314,7 +322,18 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         },
                         codegen::SLASH => if _tokens[i].chars().nth(1).unwrap() == '/' {},
                         codegen::LEFT_CURLY_BRACKET =>  kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
-                        codegen::RIGHT_CURLY_BRACKET => kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", ""),
+                        codegen::RIGHT_CURLY_BRACKET => {
+                            if is_class && !is_function {
+                                kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, ";", "", "");
+                                is_class = false;
+                                break;
+                            }
+                            else if is_function {
+                                is_function = false;
+                            }
+
+                            kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", "")
+                        },
                         _ => {
                             if _tokens[i] == codegen::_KALEM_STRING {
                                 if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {

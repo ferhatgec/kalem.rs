@@ -28,6 +28,8 @@ pub mod codegen {
 
     pub const _KALEM_NAMESPACE:         &str = "namespace";
 
+    pub const _KALEM_CLASS:             &str = "class";
+
     pub const _KALEM_IF:                &str = "if";
     pub const _KALEM_ELSE:              &str = "els";
     pub const _KALEM_ELSE_IF:           &str = "elsif";
@@ -62,6 +64,8 @@ pub mod codegen {
     pub const _CPP_KALEM_DEFINE:        &str = "define";
 
     pub const _CPP_KALEM_NAMESPACE:     &str = "namespace";
+
+    pub const _CPP_KALEM_CLASS:         &str = "class";
 
     pub const _CPP_KALEM_IF:            &str = "if";
     pub const _CPP_KALEM_ELSE:          &str = "else";
@@ -123,7 +127,10 @@ pub enum KalemTokens {
     KalemFunctionCall,
 
     KalemDefine,
+
     KalemNamespace,
+
+    KalemClass,
 
     KalemIf,
     // KalemWhile,
@@ -318,6 +325,11 @@ pub fn kalem_codegen(token: KalemTokens,
                                                   codegen::_CPP_KALEM_NAMESPACE,
                                                   keyword).as_str());
         },
+        KalemTokens::KalemClass => {
+            data.kalem_generated.push_str(format!("{} {}",
+                                                  codegen::_CPP_KALEM_CLASS,
+                                                  keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap()).as_str());
+        },
         KalemTokens::KalemIf => {
             data.kalem_generated.push_str(codegen::_CPP_KALEM_IF);
             data.kalem_generated.push_str(format!("({})", keyword).as_str());
@@ -443,6 +455,10 @@ pub fn kalem_codegen(token: KalemTokens,
         },
         KalemTokens::KalemRightCurlyBracket => {
             data.kalem_generated.push(codegen::RIGHT_CURLY_BRACKET);
+
+            if !keyword.is_empty() {
+                data.kalem_generated.push(codegen::SEMICOLON);
+            }
         },
         KalemTokens::KalemNewline => {
             data.kalem_generated.push(codegen::NEWLINE);
