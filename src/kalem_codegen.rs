@@ -153,6 +153,7 @@ pub struct KalemCodegenStruct {
     pub kalem_cpp_flags:    String,
     pub kalem_cpp_dirs:     String,
     pub kalem_cpp_compiler: String,
+    pub kalem_cpp_sysroot:  String,
 
     pub kalem_source_files: Vec<String>,
 
@@ -335,6 +336,11 @@ pub fn kalem_codegen(token: KalemTokens,
                 else if flag_name == "cpp-compiler" {
                     if flag_data != "default" && flag_data != data.kalem_cpp_compiler {
                         data.kalem_cpp_compiler = flag_data;
+                    }
+                }
+                else if flag_name == "cpp-sysroot" {
+                    if flag_data != "false" {
+                        data.kalem_cpp_sysroot = format!("--{}={}", "sysroot", flag_data).to_string();
                     }
                 }
 

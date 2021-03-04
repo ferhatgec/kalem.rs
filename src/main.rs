@@ -138,6 +138,7 @@ fn main() {
         .arg(format!("-std={}", codegen.kalem_cpp_standard))
         .args(codegen.kalem_cpp_dirs.split(" "))
         .arg(codegen.kalem_cpp_flags)
+        .arg(codegen.kalem_cpp_sysroot)
         .arg(&filename)
         .arg("-o")
         .arg(output)
