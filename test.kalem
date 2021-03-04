@@ -1,3 +1,6 @@
+// 'required_flag' defines type of file (required for libraries)
+!required_flag("library")
+
 #import <ios>
 
 @my_test void {

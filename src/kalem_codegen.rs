@@ -35,6 +35,7 @@ pub mod codegen {
     // pub const _KALEM_WHILE:             &str = "while";
 
     pub const _KALEM_FLAG:              &str = "flag";
+    pub const _KALEM_REQUIRED_FLAG:     &str = "required_flag";
     pub const _KALEM_INCLUDE_DIR:       &str = "include_dir";
     pub const _KALEM_ADD_SOURCE:        &str = "add_source";
 
@@ -100,6 +101,9 @@ pub mod codegen {
 pub mod append_codegen {
     pub const _CPP_KALEM_ARGC:          &str = "argc";
     pub const _CPP_KALEM_ARGV:          &str = "argv";
+
+    pub const _CPP_IFNDEF:              &str = "ifndef";
+    pub const _CPP_ENDIF:               &str = "endif";
 }
 
 pub enum KalemTokens {
@@ -127,6 +131,7 @@ pub enum KalemTokens {
     KalemElseIf,
 
     KalemFlag,
+    KalemRequiredFlag,
     KalemIncludeDir,
     KalemAddSource,
 
@@ -159,6 +164,7 @@ pub struct KalemCodegenStruct {
     pub kalem_source_files: Vec<String>,
 
     pub kalem_cpp_output: bool,
+    pub kalem_library   :bool,
 }
 
 pub fn kalem_codegen(token: KalemTokens,
@@ -361,6 +367,24 @@ pub fn kalem_codegen(token: KalemTokens,
                 }
 
                 drop(flag_name);
+            }
+        },
+        KalemTokens::KalemRequiredFlag => {
+            let flag_data = get_include_dir_data(variable, 16);
+
+            if flag_data == "library" {
+                data.kalem_library = true;
+
+                let mut filename = String::from(keyword);
+
+                filename = filename.replace(".kalem", "");
+
+                data.kalem_generated = format!("#{} {}_HPP\n#{} {}_HPP\n{}",
+                                               append_codegen::_CPP_IFNDEF,
+                                               filename,
+                                               codegen::_CPP_KALEM_DEFINE,
+                                               filename,
+                                               &data.kalem_generated);
             }
         },
         KalemTokens::KalemIncludeDir => {

@@ -13,7 +13,7 @@ use std::{
 
     fs::File,
 
-    process::Command,
+    process::Command
 };
 
 use std::fs;
@@ -24,10 +24,11 @@ pub mod kalem_helpers;
 
 use kalem_codegen::{
     KalemCodegenStruct,
+    append_codegen
 };
 
 use kalem_structure::{
-    read_source,
+    read_source
 };
 
 pub struct Kalem {
@@ -108,6 +109,10 @@ fn main() {
         data = init(&format!("{}.kalem", codegen.kalem_source_files[i]).to_string());
 
         temp_codegen = read_source(data);
+
+        if temp_codegen.kalem_library {
+            temp_codegen.kalem_generated.push_str(format!("\n#{}", append_codegen::_CPP_ENDIF).as_str());
+        }
 
         if Path::new(format!("{}.hpp", codegen.kalem_source_files[i]).as_str()).exists() {
             fs::remove_file(format!("{}.hpp", codegen.kalem_source_files[i]).as_str())

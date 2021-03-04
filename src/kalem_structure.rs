@@ -54,9 +54,10 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
         kalem_source_files: vec![],
 
         kalem_cpp_output: false,
+        kalem_library:    false
     };
 
-    if let Ok(lines) = read_lines(data.kalem_filename) {
+    if let Ok(lines) = read_lines(data.kalem_filename.clone()) {
         // Consumes the iterator, returns an (Optional) String
         for line in lines {
             if let Ok(ip) = line {
@@ -300,6 +301,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         codegen::FLAG_START => {
                             if ip.contains(format!("!{}", codegen::_KALEM_FLAG).as_str()) {
                                 kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.as_str(), "");
+                            }
+                            else if ip.contains(format!("!{}", codegen::_KALEM_REQUIRED_FLAG).as_str()) {
+                                kalem_codegen(KalemTokens::KalemRequiredFlag, &mut codegen, data.kalem_filename.clone().as_str(), ip.as_str(), "");
                             }
                             else if ip.contains(format!("!{}", codegen::_KALEM_ADD_SOURCE).as_str()) {
                                 kalem_codegen(KalemTokens::KalemAddSource, &mut codegen, "", ip.as_str(), "");
