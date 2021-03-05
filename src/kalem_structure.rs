@@ -68,10 +68,11 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                 }
 
                 let _tokens: Vec<&str> = ip.trim().split(" ").collect();
+                let mut i: usize = 0;
 
                 vec_size = _tokens.len();
 
-                for i in 0.._tokens.len() {
+                while i < vec_size {
                     match _tokens[i].chars().nth(0).unwrap() as char {
                         codegen::SHARP => {
                             if _tokens[i] == format!("#{}", codegen::_KALEM_IMPORT).as_str() {
@@ -240,6 +241,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                                         if is_main == false {
                                             kalem_codegen(KalemTokens::KalemFunction, &mut codegen, function_name.as_str(), function_type.as_str(), arguments.as_str());
+                                            i = i + 2;
                                         }
                                         else if is_main == true && function_type.is_empty() {
                                             if !arguments.is_empty() {
@@ -428,6 +430,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                         }
                     }
+
+                    i = i + 1;
                 }
                 kalem_codegen(KalemTokens::KalemNewline, &mut codegen, "", "", "");
             }

@@ -22,13 +22,17 @@
 !include_dir("./")
 
 !add_source("/usr/include/kalem/stl/variables")
+!add_source("/usr/include/kalem/stl/math")
 
 !add_source("test")
 
 #import <StringTools.hpp>
 
 #include <test>
+
+// STL
 #include <variables>
+#include <math>
 
 #defn TEST "Hi, preprocessor!\n"
 
@@ -148,6 +152,10 @@
 
     @print "int16_test : "
     @print int16_test
+    @print "\n"
+
+    @print "factorial(7) : "
+    @print math::factorial(7)
     @print "\n"
 
     @return 0
