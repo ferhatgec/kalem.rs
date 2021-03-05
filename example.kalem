@@ -165,6 +165,9 @@
     // Base = 10 logarithm
     @print "log(32) : "
     @print math::log(32,10)
+
+    @print "\nabs(-2021) : "
+    @print math::abs(-2021)
     @print "\n"
 
     @return 0
