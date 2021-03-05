@@ -7,7 +7,8 @@
 
 use crate::kalem_helpers::{
     get_flag_data,
-    get_include_dir_data
+    get_include_dir_data,
+    extract_file_name
 };
 
 #[allow(dead_code)]
@@ -422,6 +423,8 @@ pub fn kalem_codegen(token: KalemTokens,
                 let mut filename = String::from(keyword);
 
                 filename = filename.replace(".kalem", "");
+
+                filename = extract_file_name(&filename).to_string();
 
                 data.kalem_generated = format!("#{} {}_HPP\n#{} {}_HPP\n{}",
                                                append_codegen::_CPP_IFNDEF,

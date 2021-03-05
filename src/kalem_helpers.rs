@@ -5,6 +5,8 @@
 //
 //
 
+use std::path::Path;
+
 pub fn get_statement_data<'a>(tokens: Vec<&'a str>, i: usize) -> String {
     let mut string_data = String::new();
     let mut f: usize = i + 1;
@@ -61,4 +63,10 @@ pub fn get_include_dir_data<'a>(_variable: &'a str, n: usize) -> String {
     }
 
     flag_data
+}
+
+pub fn extract_file_name(_path: &str) -> &str {
+    let data = Path::new(_path).file_name().unwrap().to_str().unwrap();
+
+    &data
 }

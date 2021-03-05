@@ -31,6 +31,10 @@ use kalem_structure::{
     read_source
 };
 
+use kalem_helpers::{
+    extract_file_name
+};
+
 pub struct Kalem {
     pub kalem_filename: String,
     pub kalem_filedata: String,
@@ -120,7 +124,10 @@ fn main() {
         }
 
         // TODO: Create simple log function implementation (success, failed, warning)
-        let mut file = match File::create(&Path::new(&format!("{}.hpp", codegen.kalem_source_files[i]))) {
+
+        println!("data: {}", codegen.kalem_source_files[i]);
+
+        let mut file = match File::create(&Path::new(&format!("{}.hpp", extract_file_name(codegen.kalem_source_files[i].as_str())))) {
             Err(why) => panic!("Couldn't create {}: {}", display, why),
             Ok(file) => file,
         };
