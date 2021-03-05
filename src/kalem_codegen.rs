@@ -390,6 +390,9 @@ pub fn kalem_codegen(token: KalemTokens,
                         data.kalem_cpp_sysroot = format!("--{}={}", "sysroot", flag_data).to_string();
                     }
                 }
+                else if flag_name == "hash-cache" {
+                    println!("{}", "Kalem.rs is not supporting hash caching yet.");
+                }
 
                 drop(flag_name);
             }
@@ -410,6 +413,9 @@ pub fn kalem_codegen(token: KalemTokens,
                                                codegen::_CPP_KALEM_DEFINE,
                                                filename,
                                                &data.kalem_generated);
+            }
+            else if flag_data == "source" {
+                data.kalem_library = false;
             }
         },
         KalemTokens::KalemIncludeDir => {

@@ -1,3 +1,7 @@
+// required_flag just defines file type,
+// for source file it's not required.
+!required_flag("source")
+
 #import <ios>
 #import <stdstr>
 
@@ -6,6 +10,7 @@
 !flag("cpp-standard=c++2a")
 !flag("cpp-output=true")
 !flag("cpp-sysroot=false")
+!flag("hash-cache=false")
 
 // default=clang
 !flag("cpp-compiler=default")
