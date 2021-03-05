@@ -334,6 +334,11 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                             kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", "")
                         },
+                        codegen::MEMBER => {
+                            if is_class {
+                                kalem_codegen(KalemTokens::KalemClassMemberVisibility, &mut codegen, _tokens[i], "", "");
+                            }
+                        },
                         _ => {
                             if _tokens[i] == codegen::_KALEM_STRING {
                                 if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {

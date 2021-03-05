@@ -97,6 +97,8 @@ pub mod codegen {
 
     pub const FLAG_START:               char = '!';
 
+    pub const MEMBER:                   char = '~';
+
     pub const WHITESPACE:               char = ' ';
 
     pub const NEWLINE:                  char = '\n';
@@ -131,6 +133,8 @@ pub enum KalemTokens {
     KalemNamespace,
 
     KalemClass,
+    KalemClassMemberVisibility,
+
 
     KalemIf,
     // KalemWhile,
@@ -329,6 +333,15 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_generated.push_str(format!("{} {}",
                                                   codegen::_CPP_KALEM_CLASS,
                                                   keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap()).as_str());
+        },
+        KalemTokens::KalemClassMemberVisibility => {
+            let keyword = keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap();
+
+            if keyword == "public"
+                || keyword == "protected"
+                || keyword == "private" {
+                data.kalem_generated.push_str(format!("{}:\n", keyword).as_str());
+            }
         },
         KalemTokens::KalemIf => {
             data.kalem_generated.push_str(codegen::_CPP_KALEM_IF);
