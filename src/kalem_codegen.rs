@@ -15,6 +15,7 @@ pub mod codegen {
     pub const _KALEM_INT:               &str = "int";
     pub const _KALEM_UNSIGNED:          &str = "unsign";
     pub const _KALEM_STRING:            &str = "string";
+    pub const _KALEM_STR:               &str = "str";
     pub const _KALEM_CHAR:              &str = "char";
 
     pub const _KALEM_IMPORT:            &str = "import";
@@ -53,6 +54,7 @@ pub mod codegen {
     pub const _CPP_KALEM_INT:           &str = "int";
     pub const _CPP_KALEM_UNSIGNED:      &str = "unsigned";
     pub const _CPP_KALEM_STRING:        &str = "string";
+    pub const _CPP_KALEM_STR:           &str = "char";
     pub const _CPP_KALEM_CHAR:          &str = "char";
 
     pub const _CPP_KALEM_IMPORT:        &str = "include";
@@ -116,6 +118,7 @@ pub enum KalemTokens {
     KalemInt = 0,
     KalemUnsigned,
     KalemString,
+    KalemStr,
     KalemChar,
 
     KalemImport,
@@ -224,6 +227,19 @@ pub fn kalem_codegen(token: KalemTokens,
         KalemTokens::KalemString => {
             data.kalem_generated.push_str(format!("std::{} {}",
                                                   codegen::_CPP_KALEM_STRING,
+                                                  variable).as_str());
+
+            if !keyword.is_empty() {
+                data.kalem_generated.push_str(format!("{} {}",
+                                                      codegen::EQUAL,
+                                                      keyword).as_str());
+            }
+
+            data.kalem_generated.push(codegen::SEMICOLON);
+        },
+        KalemTokens::KalemStr => {
+            data.kalem_generated.push_str(format!("{} {}[]",
+                                                  codegen::_CPP_KALEM_STR,
                                                   variable).as_str());
 
             if !keyword.is_empty() {

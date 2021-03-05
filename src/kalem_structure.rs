@@ -340,7 +340,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                         },
                         _ => {
-                            if _tokens[i] == codegen::_KALEM_STRING {
+                            if _tokens[i] == codegen::_KALEM_STRING
+                                || _tokens[i] == codegen::_KALEM_STR {
                                 if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {
                                     if _tokens[i + 2].chars().next().unwrap() == '"' {
                                         let mut string_data: String = String::new();
@@ -355,7 +356,14 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                                 f = f + 1;
                                             }
                                         }
-                                        kalem_codegen(KalemTokens::KalemString, &mut codegen, string_data.as_str(), _tokens[i + 1], "");
+
+                                        let x = if _tokens[i] == codegen::_KALEM_STRING {
+                                            KalemTokens::KalemString
+                                        } else {
+                                            KalemTokens::KalemStr
+                                        };
+
+                                        kalem_codegen(x, &mut codegen, string_data.as_str(), _tokens[i + 1], "");
                                     }
                                     else {
                                         // Syntax error (string x =)

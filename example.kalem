@@ -71,6 +71,7 @@
     string test "[Hello, Kalem!]\n"
     int _test 10
     unsign _test_ 20
+    str my_str_test "Hello str!\n"
 
     // Kalem does not support class declaring yet.
     #my_class myclass;
@@ -132,6 +133,8 @@
     @my_test
 
     @myclass.another_my_class_function
+
+    @print my_str_test
 
     @return 0
 }
