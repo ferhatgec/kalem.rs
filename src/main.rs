@@ -124,9 +124,6 @@ fn main() {
         }
 
         // TODO: Create simple log function implementation (success, failed, warning)
-
-        println!("data: {}", codegen.kalem_source_files[i]);
-
         let mut file = match File::create(&Path::new(&format!("{}.hpp", extract_file_name(codegen.kalem_source_files[i].as_str())))) {
             Err(why) => panic!("Couldn't create {}: {}", display, why),
             Ok(file) => file,

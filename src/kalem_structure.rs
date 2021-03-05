@@ -410,7 +410,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 kalem_codegen(KalemTokens::KalemElse, &mut codegen, "", "", "");
                             }
                             else if _tokens[i] == codegen::_KALEM_LOOP {
-                                kalem_codegen(KalemTokens::KalemLoop, &mut codegen, "", "", "");
+                                kalem_codegen(KalemTokens::KalemLoop, &mut codegen, _tokens[i + 1], get_statement_data(_tokens.to_vec(), i).as_str(), "");
                             }
                             else if _tokens[i] == codegen::_KALEM_CONTINUE {
                                 kalem_codegen(KalemTokens::KalemContinue, &mut codegen, "", "", "");

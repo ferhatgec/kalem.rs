@@ -455,10 +455,15 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_source_files.push(source_data);
         },
         KalemTokens::KalemLoop => {
-            // 'loop' does not support arguments yet.
+            let mut variable = String::from(variable);
+
+            if keyword.is_empty() || keyword == "{" {
+                variable = "1".to_string();
+            }
+
             data.kalem_generated.push_str(format!("{}({})",
                                                   codegen::_CPP_KALEM_LOOP,
-                                                  "1").as_str());
+                                                  variable).as_str());
         },
         KalemTokens::KalemContinue => {
             data.kalem_generated.push_str(format!("{};", codegen::_CPP_KALEM_CONTINUE).as_str());
