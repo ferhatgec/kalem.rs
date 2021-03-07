@@ -10,3 +10,24 @@
 !required_flag("library")
 
 #import <iostream>
+
+@ios namespace {
+    #template <typename... Arguments>
+    @basic_print(Arguments... args,string sep,string end) void {
+        #((std::cout << args << sep), ...) << end;
+    }
+
+    #template <typename... Arguments>
+    @print(Arguments... args) void {
+        #((std::cout << args << " "), ...);
+    }
+
+    #template <typename... Arguments>
+    @println(Arguments... args) void {
+        #((std::cout << args << " "), ...) << "\n";
+    }
+
+    @builtin_println(string data) void {
+        @print data+"\n"
+    }
+}

@@ -201,5 +201,8 @@
 
     @print "\n"
 
+    @ios::println("Hello,", "world!", "from ", "ios:println!")
+    @ios::builtin_println("'Hello, world!' from ios::builtin_print!")
+
     @return 0
 }
