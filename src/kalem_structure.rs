@@ -39,6 +39,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut is_main:     bool = false;
     let mut is_class:    bool = false;
     let mut is_function: bool = false;
+    let mut is_switch:   bool = false;
+    let mut is_case:     bool = false;
 
     let mut vec_size;
 
@@ -329,12 +331,23 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             else if is_function {
                                 is_function = false;
                             }
+                            else if is_case && is_switch {
+                                is_case = false;
+                            }
+                            else if is_case && is_switch {
+                                is_switch = false;
+                            }
 
-                            kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", "")
+                            kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", "");
+
+                            break;
                         },
                         codegen::MEMBER => {
                             if is_class {
                                 kalem_codegen(KalemTokens::KalemClassMemberVisibility, &mut codegen, _tokens[i], "", "");
+                            }
+                            else if is_switch {
+                                kalem_codegen(KalemTokens::KalemCase, &mut codegen, _tokens[i], "", "");
                             }
                         },
                         _ => {
@@ -413,6 +426,10 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                             else if _tokens[i] == codegen::_KALEM_BREAK {
                                 kalem_codegen(KalemTokens::KalemBreak, &mut codegen, "", "", "");
+                            }
+                            else if _tokens[i] == codegen::_KALEM_SWITCH {
+                                kalem_codegen(KalemTokens::KalemSwitch, &mut codegen, "", _tokens[i + 1], "");
+                                is_switch = true;
                             }
                             else if _tokens[i].len() > 1 && ((_tokens[i].chars().last().unwrap() == '+'
                                     && _tokens[i].chars().nth_back(1).unwrap() == '+')

@@ -48,6 +48,8 @@ pub mod codegen {
     pub const _KALEM_CONTINUE:          &str = "continue";
     pub const _KALEM_BREAK:             &str = "break";
 
+    pub const _KALEM_SWITCH:            &str = "switch";
+
     pub const _KALEM_VOID:              &str = "void";
 
     pub const _KALEM_VECTOR:            &str = "vect";
@@ -79,6 +81,9 @@ pub mod codegen {
 
     pub const _CPP_KALEM_CONTINUE:      &str = "continue";
     pub const _CPP_KALEM_BREAK:         &str = "break";
+
+    pub const _CPP_KALEM_SWITCH:        &str = "switch";
+    pub const _CPP_KALEM_CASE:          &str = "case";
 
     pub const _CPP_KALEM_VOID:          &str = "void";
 
@@ -154,6 +159,9 @@ pub enum KalemTokens {
 
     KalemContinue,
     KalemBreak,
+
+    KalemSwitch,
+    KalemCase,
 
     KalemLink,
 
@@ -470,6 +478,23 @@ pub fn kalem_codegen(token: KalemTokens,
         },
         KalemTokens::KalemBreak => {
             data.kalem_generated.push_str(format!("{};", codegen::_CPP_KALEM_BREAK).as_str());
+        },
+        KalemTokens::KalemSwitch => {
+            data.kalem_generated.push_str(format!("{}({})",
+                                                  codegen::_CPP_KALEM_SWITCH,
+                                                  variable).as_str());
+        },
+        KalemTokens::KalemCase => {
+            let mut keyword = String::from(keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap());
+
+            if keyword != "default" {
+                keyword = format!("{} {}:", codegen::_CPP_KALEM_CASE, keyword);
+            }
+            else {
+                keyword = format!("{}:", keyword);
+            }
+
+            data.kalem_generated.push_str(keyword.as_str());
         },
         KalemTokens::KalemLink => {
             // TODO: Create pop_front() function
