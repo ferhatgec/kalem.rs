@@ -228,10 +228,7 @@ pub fn kalem_codegen(token: KalemTokens,
                     source_data = format!("/usr/include/kalem/stl/{}", characters.as_str().to_string());
 
                     if Path::new(format!("{}.kalem", source_data).as_str()).exists() {
-                        println!("log 2");
-
                         if !data.kalem_source_files.contains(&source_data) {
-                            println!("log 3 {}", source_data);
                             data.kalem_source_files.push(source_data);
                         }
                     }
