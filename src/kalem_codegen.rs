@@ -507,7 +507,12 @@ pub fn kalem_codegen(token: KalemTokens,
             data.kalem_generated.push(codegen::NEWLINE);
         },
         KalemTokens::KalemUndefined => {
-            data.kalem_generated.push_str(format!("{};", variable).as_str());
+            if !variable.is_empty() {
+                data.kalem_generated.push_str(format!("{};", variable).as_str());
+            }
+            else if !keyword.is_empty() {
+                data.kalem_generated.push_str(format!("{};", keyword).as_str());
+            }
         },
     }
 }

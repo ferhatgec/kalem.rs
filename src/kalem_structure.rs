@@ -62,7 +62,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     if let Ok(lines) = read_lines(data.kalem_filename.clone()) {
         // Consumes the iterator, returns an (Optional) String
         for line in lines {
-            if let Ok(ip) = line {
+            if let Ok(mut ip) = line {
                 if ip.len() == 0 {
                     continue;
                 }
@@ -74,6 +74,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                 while i < vec_size {
                     match _tokens[i].chars().nth(0).unwrap() as char {
+                        codegen::SLASH => {
+                            if _tokens[i].chars().nth(1).unwrap() == '/' {
+                                i = i + _tokens[i].len();
+                            }
+
+                            break;
+                        },
                         codegen::SHARP => {
                             if _tokens[i] == format!("#{}", codegen::_KALEM_IMPORT).as_str() {
                                 kalem_codegen(KalemTokens::KalemImport, &mut codegen, _tokens[i + 1], "", "");
@@ -121,28 +128,18 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                             else if _tokens[i] == format!("@{}", codegen::_KALEM_PRINT) {
                                 if _tokens[i + 1].chars().next().unwrap() == '"' {
-                                    let mut string_data = String::new();
-                                    let mut f: usize = i + 1;
+                                    let mut start = ip.find("\"").unwrap_or(0);
 
-                                    loop {
-                                        string_data.push_str(_tokens[f]);
-
-                                        if _tokens[f].chars().nth(_tokens[f].len()-1).unwrap() == '"' {
-                                            break;
-                                        }
-                                        else {
-                                            string_data.push(' ');
-                                            f = f + 1;
-                                        }
-                                    }
-
-                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, string_data.as_str(), "", "");
+                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, &ip[start..ip.len()], "", "");
                                 }
                                 else {
                                     kalem_codegen(KalemTokens::KalemPrint, &mut codegen, _tokens[i + 1], "", "");
                                 }
 
                                 break;
+                            }
+                            else if _tokens[i].contains("=") {
+                                kalem_codegen(KalemTokens::KalemUndefined, &mut codegen, _tokens[i].chars().next().map(|c| &_tokens[i][c.len_utf8()..]).unwrap(), "", "");
                             }
                             else {
                                 let mut arguments = String::new();
@@ -322,7 +319,6 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 kalem_codegen(KalemTokens::KalemIncludeDir, &mut codegen, "", ip.as_str(), "");
                             }
                         },
-                        codegen::SLASH => if _tokens[i].chars().nth(1).unwrap() == '/' {},
                         codegen::LEFT_CURLY_BRACKET =>  kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
                         codegen::RIGHT_CURLY_BRACKET => {
                             if is_class && !is_function {
@@ -345,8 +341,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             if _tokens[i] == codegen::_KALEM_STRING
                                 || _tokens[i] == codegen::_KALEM_STR {
                                 if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {
+                                    let mut string_data: String = String::new();
+
                                     if _tokens[i + 2].chars().next().unwrap() == '"' {
-                                        let mut string_data: String = String::new();
                                         let mut f: usize = i + 2;
                                         loop {
                                             string_data.push_str(_tokens[f]);
@@ -358,18 +355,15 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                                 f = f + 1;
                                             }
                                         }
-
-                                        let x = if _tokens[i] == codegen::_KALEM_STRING {
-                                            KalemTokens::KalemString
-                                        } else {
-                                            KalemTokens::KalemStr
-                                        };
-
-                                        kalem_codegen(x, &mut codegen, string_data.as_str(), _tokens[i + 1], "");
                                     }
-                                    else {
-                                        // Syntax error (string x =)
-                                    }
+
+                                    let x = if _tokens[i] == codegen::_KALEM_STRING {
+                                        KalemTokens::KalemString
+                                    } else {
+                                        KalemTokens::KalemStr
+                                    };
+
+                                    kalem_codegen(x, &mut codegen, string_data.as_str(), _tokens[i + 1], "");
                                 }
                             }
                             else if _tokens[i] == codegen::_KALEM_INT
@@ -382,14 +376,16 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     let x = if _tokens[i] == codegen::_KALEM_INT {
                                         KalemTokens::KalemInt
                                     }
-                                    else if _tokens[i] == codegen::_KALEM_CHAR {
-                                        KalemTokens::KalemChar
-                                    }
                                     else {
                                         KalemTokens::KalemUnsigned
                                     };
 
                                     kalem_codegen(x, &mut codegen, _tokens[i + 2], _tokens[i + 1], "");
+                                }
+                                else {
+                                    if _tokens[i] == codegen::_KALEM_CHAR {
+                                        kalem_codegen(KalemTokens::KalemChar, &mut codegen, _tokens[i + 2], _tokens[i + 1], "");
+                                    }
                                 }
                             }
                             else if _tokens[i] == codegen::_KALEM_IF {

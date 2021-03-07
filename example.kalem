@@ -23,6 +23,7 @@
 
 !add_source("/usr/include/kalem/stl/variables")
 !add_source("/usr/include/kalem/stl/math")
+!add_source("/usr/include/kalem/stl/tools")
 
 !add_source("test")
 
@@ -33,6 +34,7 @@
 // STL
 #include <variables>
 #include <math>
+#include <tools>
 
 #defn TEST "Hi, preprocessor!\n"
 
@@ -168,6 +170,16 @@
 
     @print "\nabs(-2021) : "
     @print math::abs(-2021)
+    @print "\n"
+
+    char lowercase_a 'a'
+
+    @print "lowercase_a : a\n"
+    @print "to_upper(lowercase_a) : "
+
+    @lowercase_a=tools::toupper(lowercase_a)
+
+    @print lowercase_a
     @print "\n"
 
     @return 0
