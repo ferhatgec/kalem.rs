@@ -2,8 +2,12 @@
 // for source file it's not required.
 !required_flag("source")
 
-#import <ios>
-#import <stdstr>
+// STL
+#include <ios>
+#include <stdstr>
+#include <variables>
+#include <math>
+#include <tools>
 
 #defn LOWERCASE_A 'a'
 #defn UPPERCASE_A 'A'
@@ -24,20 +28,11 @@
 !include_dir("./cpplib/")
 !include_dir("./")
 
-!add_source("/usr/include/kalem/stl/variables")
-!add_source("/usr/include/kalem/stl/math")
-!add_source("/usr/include/kalem/stl/tools")
-
 !add_source("test")
 
 #import <StringTools.hpp>
 
 #include <test>
-
-// STL
-#include <variables>
-#include <math>
-#include <tools>
 
 #defn TEST "Hi, preprocessor!\n"
 

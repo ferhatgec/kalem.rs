@@ -5,6 +5,8 @@
 //
 //
 
+use std::path::Path;
+
 use crate::kalem_helpers::{
     get_flag_data,
     get_include_dir_data,
@@ -199,13 +201,6 @@ pub fn kalem_codegen(token: KalemTokens,
         KalemTokens::KalemImport => {
             let mut _keyword = String::from(keyword);
 
-            _keyword = _keyword.replace("ios", "iostream");
-            _keyword = _keyword.replace("stdstr", "string");
-            _keyword = _keyword.replace("vect", "vector");
-            _keyword = _keyword.replace("cstdstr", "cstring");
-            _keyword = _keyword.replace("iom", "iomanip");
-            _keyword = _keyword.replace("filesys", "filesystem");
-            _keyword = _keyword.replace("fst", "fstream");
             _keyword = _keyword.replace(".kalem", ".hpp");
 
             data.kalem_generated.push_str(format!("#{} {}",
@@ -221,6 +216,30 @@ pub fn kalem_codegen(token: KalemTokens,
                 _keyword = _keyword.replace(".kalem", ".hpp");
             }
             else {
+                if _keyword.chars().last().unwrap() == '>' {
+                    let mut source_data = String::from(extract_file_name(_keyword.as_str()));
+
+                    // TODO: Add remove_fl helper function
+                    let mut characters = source_data.chars();
+
+                    characters.next();
+                    characters.next_back();
+
+                    source_data = format!("/usr/include/kalem/stl/{}", characters.as_str().to_string());
+
+                    if Path::new(format!("{}.kalem", source_data).as_str()).exists() {
+                        println!("log 2");
+
+                        if !data.kalem_source_files.contains(&source_data) {
+                            println!("log 3 {}", source_data);
+                            data.kalem_source_files.push(source_data);
+                        }
+                    }
+                    // else {
+                        // Throw error
+                    //}
+                }
+
                 _keyword.pop();
 
                 _keyword.push_str(".hpp");
