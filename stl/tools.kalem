@@ -8,9 +8,9 @@
 //
 
 
-!required_flag("source")
+!required_flag("library")
 
-#import <ios>
+#include <ios>
 
 @tools namespace {
     @isupper(char ch) int {

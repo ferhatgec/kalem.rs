@@ -9,9 +9,7 @@
 
 !required_flag("library")
 
-!add_source("/usr/include/kalem/stl/variables")
-
-#include "variables"
+#include <variables>
 
 #defn PI 3.142
 
