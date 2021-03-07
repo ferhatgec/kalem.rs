@@ -64,7 +64,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     if let Ok(lines) = read_lines(data.kalem_filename.clone()) {
         // Consumes the iterator, returns an (Optional) String
         for line in lines {
-            if let Ok(mut ip) = line {
+            if let Ok(ip) = line {
                 if ip.len() == 0 {
                     continue;
                 }
@@ -77,9 +77,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                 while i < vec_size {
                     match _tokens[i].chars().nth(0).unwrap() as char {
                         codegen::SLASH => {
-                            if _tokens[i].chars().nth(1).unwrap() == '/' {
-                                i = i + _tokens[i].len();
-                            }
+                            if _tokens[i].chars().nth(1).unwrap() == '/' {}
 
                             break;
                         },
@@ -130,7 +128,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                             else if _tokens[i] == format!("@{}", codegen::_KALEM_PRINT) {
                                 if _tokens[i + 1].chars().next().unwrap() == '"' {
-                                    let mut start = ip.find("\"").unwrap_or(0);
+                                    let start = ip.find("\"").unwrap_or(0);
 
                                     kalem_codegen(KalemTokens::KalemPrint, &mut codegen, &ip[start..ip.len()], "", "");
                                 }
