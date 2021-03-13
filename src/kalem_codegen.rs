@@ -193,6 +193,13 @@ pub struct KalemCodegenStruct {
     pub kalem_library   :bool,
 }
 
+pub enum KalemCase {
+    SnakeCase,
+    PascalCase,
+
+    UndefinedCase,
+}
+
 pub fn kalem_codegen(token: KalemTokens,
     data: &mut KalemCodegenStruct,
     keyword: &str,

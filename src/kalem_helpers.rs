@@ -5,6 +5,10 @@
 //
 //
 
+use crate::{
+    kalem_codegen::KalemCase,
+};
+
 use std::path::Path;
 
 pub fn get_statement_data<'a>(tokens: Vec<&'a str>, i: usize) -> String {
@@ -69,4 +73,22 @@ pub fn extract_file_name(_path: &str) -> &str {
     let data = Path::new(_path).file_name().unwrap().to_str().unwrap();
 
     &data
+}
+
+pub fn get_case(name_data: &str) -> KalemCase {
+    if name_data.is_empty() {
+        return KalemCase::UndefinedCase;
+    }
+
+    let name_data = name_data.chars().next().map(|c| &name_data[c.len_utf8()..]).unwrap();
+
+    return if name_data.split("_").count() > 1 || name_data == name_data.to_lowercase() {
+        KalemCase::SnakeCase
+    }
+    else if name_data != name_data.to_lowercase() {
+        KalemCase::PascalCase
+    }
+    else {
+        KalemCase::UndefinedCase
+    };
 }

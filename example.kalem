@@ -75,6 +75,11 @@
     @print "\n"
 }
 
+// snake_case warning.
+@SayX(string x) void {
+    @ios::println(x)
+}
+
 @main int {
     string test "[Hello, Kalem!]\n"
     string str_year "2021"
@@ -243,6 +248,8 @@
 
     @print ios::to_int(str_year)
     @print "\n"
+
+    @SayX("Hello, world.")
 
     @ios::exit(SUCCESS)
 }

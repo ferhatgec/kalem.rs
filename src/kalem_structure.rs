@@ -7,8 +7,13 @@
 
 use crate:: {
     kalem_codegen::kalem_codegen,
+    kalem_codegen::KalemCase,
+
     kalem_helpers::get_statement_data,
+    kalem_helpers::get_case,
+
     kalem_types::is_numeric_data,
+
     Kalem
 };
 
@@ -161,6 +166,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                                 is_class = true;
                                             }
                                             else {
+                                                match get_case(function_name.as_str()) {
+                                                    KalemCase::PascalCase =>
+                                                        // Create log system for warnings, errors.
+                                                        println!("help: Convert '{}' to snake_case", function_name),
+                                                    _ => {}
+                                                }
+
                                                 kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1], "");
                                                 is_function = true;
                                             }
@@ -241,6 +253,15 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                         function_type = function_type.trim().to_string();
 
                                         if is_main == false {
+                                            // In Kalem, function names should be written
+                                            // as snake_case on by default.
+                                            match get_case(function_name.as_str()) {
+                                                KalemCase::PascalCase =>
+                                                // Create log system for warnings, errors.
+                                                    println!("help: Convert '{}' to snake_case", function_name),
+                                                _ => {}
+                                            }
+
                                             kalem_codegen(KalemTokens::KalemFunction, &mut codegen, function_name.as_str(), function_type.as_str(), arguments.as_str());
                                             i = i + 2;
                                         }
