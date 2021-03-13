@@ -80,6 +80,12 @@
     unsign _test_ 20
     str my_str_test "Hello str!\n"
 
+    int {
+        year 2021
+        month 3
+        day 13
+    }
+
     #i16 int16_test = 16;
     #u32 uint32_test = 32;
 

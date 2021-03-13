@@ -18,9 +18,10 @@ use std::{
 
 use std::fs;
 
-pub mod kalem_codegen;
-pub mod kalem_structure;
-pub mod kalem_helpers;
+mod kalem_codegen;
+mod kalem_structure;
+mod kalem_helpers;
+mod kalem_types;
 
 use kalem_codegen::{
     KalemCodegenStruct,

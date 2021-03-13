@@ -8,6 +8,7 @@
 use crate:: {
     kalem_codegen::kalem_codegen,
     kalem_helpers::get_statement_data,
+    kalem_types::is_numeric_data,
     Kalem
 };
 
@@ -41,8 +42,11 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut is_function: bool = false;
     let mut is_switch:   bool = false;
     let mut is_case:     bool = false;
+    let mut is_variable: bool = false;
 
     let mut vec_size;
+
+    let mut var_type: KalemTokens = KalemTokens::KalemUndefined;
 
     let mut codegen = KalemCodegenStruct {
         kalem_generated: "".to_string(),
@@ -321,7 +325,11 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         },
                         codegen::LEFT_CURLY_BRACKET =>  kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
                         codegen::RIGHT_CURLY_BRACKET => {
-                            if is_class && !is_function {
+                            if is_variable {
+                                is_variable = false;
+                                break;
+                            }
+                            else if is_class && !is_function {
                                 kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, ";", "", "");
                                 is_class = false;
                                 break;
@@ -349,6 +357,14 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                         },
                         _ => {
+                            if is_variable {
+                                let x = var_type;
+
+                                kalem_codegen(x, &mut codegen, _tokens[i + 1], _tokens[i], "");
+
+                                break;
+                            }
+
                             if _tokens[i] == codegen::_KALEM_STRING
                                 || _tokens[i] == codegen::_KALEM_STR {
                                 if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {
@@ -383,13 +399,14 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 if is_argument == true {
                                     is_argument = false;
                                 }
+                                else if _tokens[i + 1].chars().nth(0).unwrap() == codegen::LEFT_CURLY_BRACKET {
+                                    is_variable = true;
+                                    var_type = is_numeric_data(&_tokens, i);
+
+                                    break;
+                                }
                                 else if _tokens[i + 2].chars().next().unwrap().is_numeric() {
-                                    let x = if _tokens[i] == codegen::_KALEM_INT {
-                                        KalemTokens::KalemInt
-                                    }
-                                    else {
-                                        KalemTokens::KalemUnsigned
-                                    };
+                                    let x = is_numeric_data(&_tokens, i);
 
                                     kalem_codegen(x, &mut codegen, _tokens[i + 2], _tokens[i + 1], "");
                                 }

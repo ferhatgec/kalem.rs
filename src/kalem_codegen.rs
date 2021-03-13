@@ -122,6 +122,7 @@ pub mod append_codegen {
     pub const _CPP_ENDIF:               &str = "endif";
 }
 
+#[derive(Clone, Copy)]
 pub enum KalemTokens {
     KalemInt = 0,
     KalemUnsigned,
