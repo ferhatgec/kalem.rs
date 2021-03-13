@@ -9,6 +9,8 @@
 
 !required_flag("library")
 
+#include <variables>
+
 #import <cstdlib>
 
 #defn ENV_OVERWRITE 1
@@ -18,7 +20,7 @@
 #defn SUCCESS 0
 
 @ios namespace {
-    @system(string data) int {
+    @system(string data) i8 {
         @return std::system(data.c_str())
     }
 
