@@ -8,6 +8,7 @@
 #include <variables>
 #include <math>
 #include <tools>
+#include <sys>
 
 #defn LOWERCASE_A 'a'
 #defn UPPERCASE_A 'A'
@@ -76,6 +77,9 @@
 
 @main int {
     string test "[Hello, Kalem!]\n"
+
+    string exec_data "ls"
+
     int _test 10
     unsign _test_ 20
     str my_str_test "Hello str!\n"
@@ -222,5 +226,16 @@
     @ios::println("Hello,", "world!", "from ", "ios:println!")
     @ios::builtin_println("'Hello, world!' from ios::builtin_print!")
 
-    @return 0
+
+    @ios::system(exec_data)
+
+    string home "HOME"
+
+    @print "HOME environment: "
+    @print ios::getenvi(home)
+    @print "\n"
+
+    //@return 0
+
+    @ios::exit(SUCCESS)
 }

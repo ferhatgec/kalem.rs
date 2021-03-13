@@ -1,0 +1,33 @@
+// Kalem Standard Template Library
+//
+// sys.kalem
+//
+// MIT License
+// Copyright (c) 2021 Ferhat Geçdoğan All Rights Reserved.
+// Distributed under the terms of the MIT License.
+//
+
+!required_flag("library")
+
+#import <cstdlib>
+
+#defn ENV_OVERWRITE 1
+#defn ENV_NOT_OVERWRITE 0
+
+#defn FAILURE 1
+#defn SUCCESS 0
+
+@ios namespace {
+    @system(string data) int {
+        @return std::system(data.c_str())
+    }
+
+    @getenvi(string env) std::string {
+        @return static_cast<std::string>(getenv(env.c_str()))
+    }
+
+    // TODO: setenvi(string envname, string envvalue, ENV_NOT_OVERWRITE)
+    @exit(i8 syscode) void {
+        @std::exit(syscode)
+    }
+}
