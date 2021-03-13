@@ -77,7 +77,7 @@
 
 @main int {
     string test "[Hello, Kalem!]\n"
-
+    string str_year "2021"
     string exec_data "ls"
 
     int _test 10
@@ -236,6 +236,13 @@
     @print "\n"
 
     //@return 0
+
+
+    @print "str_year : 2021\n"
+    @print "to_int(str_year) : "
+
+    @print ios::to_int(str_year)
+    @print "\n"
 
     @ios::exit(SUCCESS)
 }
