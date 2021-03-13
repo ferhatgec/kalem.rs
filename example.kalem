@@ -86,6 +86,7 @@
         day 13
     }
 
+
     #i16 int16_test = 16;
     #u32 uint32_test = 32;
 
@@ -176,7 +177,10 @@
     @print math::abs(-2021)
     @print "\n"
 
-    char lowercase_a 'a'
+    char {
+        lowercase_a 'a'
+        uppercase_b 'B'
+    }
 
     @print "lowercase_a : a\n"
     @print "to_upper(lowercase_a) : "
@@ -184,6 +188,14 @@
     @lowercase_a=tools::toupper(lowercase_a)
 
     @print lowercase_a
+    @print "\n"
+
+    @print "uppercase_b : B\n"
+    @print "to_lower(uppercase_b) : "
+
+    @uppercase_b=tools::tolower(uppercase_b)
+
+    @print uppercase_b
     @print "\n"
 
     @print "Character: "

@@ -14,6 +14,9 @@ pub fn is_numeric_data(tokens: &Vec<&str>, i: usize) -> KalemTokens {
     return if tokens[i] == codegen::_KALEM_INT {
         KalemTokens::KalemInt
     }
+    else if tokens[i] == codegen::_KALEM_CHAR {
+        KalemTokens::KalemChar
+    }
     else {
         KalemTokens::KalemUnsigned
     };
