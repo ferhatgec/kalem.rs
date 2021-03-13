@@ -190,7 +190,9 @@ pub struct KalemCodegenStruct {
     pub kalem_source_files: Vec<String>,
 
     pub kalem_cpp_output: bool,
-    pub kalem_library   :bool,
+    pub kalem_library   : bool,
+
+    pub kalem_ignore_case_warnings : bool,
 }
 
 pub enum KalemCase {
@@ -439,8 +441,16 @@ pub fn kalem_codegen(token: KalemTokens,
                         data.kalem_cpp_sysroot = format!("--{}={}", "sysroot", flag_data).to_string();
                     }
                 }
+                else if flag_name == "ignore-case-warnings" {
+                    if flag_data == "true" {
+                        data.kalem_ignore_case_warnings = true;
+                    }
+                    else {
+                        data.kalem_ignore_case_warnings = false;
+                    }
+                }
                 else if flag_name == "hash-cache" {
-                    println!("{}", "Kalem.rs is not supporting hash caching yet.");
+                    println!("info: {}", "Kalem.rs is not supporting hash caching yet.");
                 }
 
                 drop(flag_name);

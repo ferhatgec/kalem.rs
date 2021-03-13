@@ -17,13 +17,12 @@ use crate:: {
     Kalem
 };
 
-use std::fs::File;
-
 use std::io::{
     self,
     BufRead
 };
 
+use std::fs::File;
 use std::path::Path;
 
 use crate::kalem_codegen::{
@@ -67,7 +66,9 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
         kalem_source_files: vec![],
 
         kalem_cpp_output: false,
-        kalem_library:    false
+        kalem_library:    false,
+
+        kalem_ignore_case_warnings: false
     };
 
     if let Ok(lines) = read_lines(data.kalem_filename.clone()) {
@@ -166,11 +167,14 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                                 is_class = true;
                                             }
                                             else {
-                                                match get_case(function_name.as_str()) {
-                                                    KalemCase::PascalCase =>
+                                                // TODO: Create case_warning() function
+                                                if !codegen.kalem_ignore_case_warnings {
+                                                    match get_case(function_name.as_str()) {
+                                                        KalemCase::PascalCase =>
                                                         // Create log system for warnings, errors.
-                                                        println!("help: Convert '{}' to snake_case", function_name),
-                                                    _ => {}
+                                                            println!("help: Convert '{}' to snake_case", function_name),
+                                                        _ => {}
+                                                    }
                                                 }
 
                                                 kalem_codegen(KalemTokens::KalemFunction, &mut codegen, _tokens[i], _tokens[i + 1], "");
@@ -255,11 +259,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                         if is_main == false {
                                             // In Kalem, function names should be written
                                             // as snake_case on by default.
-                                            match get_case(function_name.as_str()) {
-                                                KalemCase::PascalCase =>
-                                                // Create log system for warnings, errors.
-                                                    println!("help: Convert '{}' to snake_case", function_name),
-                                                _ => {}
+                                            if !codegen.kalem_ignore_case_warnings {
+                                                match get_case(function_name.as_str()) {
+                                                    KalemCase::PascalCase =>
+                                                    // Create log system for warnings, errors.
+                                                        println!("help: Convert '{}' to snake_case", function_name),
+                                                    _ => {}
+                                                }
                                             }
 
                                             kalem_codegen(KalemTokens::KalemFunction, &mut codegen, function_name.as_str(), function_type.as_str(), arguments.as_str());

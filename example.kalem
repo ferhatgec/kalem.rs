@@ -26,6 +26,9 @@
 // Its type is not boolean.
 !flag("cpp-flags=false")
 
+// Ignore case warnings (snake_case, PascalCase etc.)
+!flag("ignore-case-warnings=true")
+
 !include_dir("./cpplib/")
 !include_dir("./")
 
@@ -75,7 +78,8 @@
     @print "\n"
 }
 
-// snake_case warning.
+// snake_case warning if 'ignore-case-warnings'
+// flag false.
 @SayX(string x) void {
     @ios::println(x)
 }
