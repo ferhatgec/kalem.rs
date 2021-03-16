@@ -9,6 +9,8 @@
 #include <math>
 #include <tools>
 #include <sys>
+#include <stream>
+#include <vect>
 
 #defn LOWERCASE_A 'a'
 #defn UPPERCASE_A 'A'
@@ -88,6 +90,8 @@
     string test "[Hello, Kalem!]\n"
     string str_year "2021"
     string exec_data "ls"
+    string split_test "Hi-Kalem.rs-huh"
+
 
     int _test 10
     unsign _test_ 20
@@ -254,6 +258,10 @@
     @print "\n"
 
     @SayX("Hello, world.")
+
+    #auto vect = ios::split(split_test, '-');
+
+    @ios::println(vect[0], vect[1], vect[2])
 
     @ios::exit(SUCCESS)
 }

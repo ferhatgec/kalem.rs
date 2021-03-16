@@ -9,6 +9,9 @@
 
 !required_flag("library")
 
+#include <stream>
+#include <vect>
+
 #import <string>
 
 @ios namespace {
@@ -82,5 +85,18 @@
         }
 
         @return __data
+    }
+
+    @split(string data, char delimiter) std::vector<std::string> {
+        #std::vector<std::string> tokens;
+        #std::istringstream stream(data);
+
+        string temp_data nil
+
+        loop std::getline(stream, temp_data, delimiter) {
+            @tokens.push_back(temp_data)
+        }
+
+        @return tokens
     }
 }
