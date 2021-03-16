@@ -56,6 +56,8 @@ pub mod codegen {
 
     pub const _KALEM_VECTOR:            &str = "vect";
 
+    pub const _KALEM_UNIMPLEMENTED:     char = '?';
+
     pub const _CPP_KALEM_INT:           &str = "int";
     pub const _CPP_KALEM_UNSIGNED:      &str = "unsigned";
     pub const _CPP_KALEM_STRING:        &str = "string";
@@ -165,6 +167,8 @@ pub enum KalemTokens {
 
     KalemSwitch,
     KalemCase,
+
+    // KalemUnImplemented,
 
     KalemLink,
 
@@ -341,6 +345,21 @@ pub fn kalem_codegen(token: KalemTokens,
             }
             else {
                 argument = "()".to_string();
+            }
+
+            let mut variable = String::from(variable);
+
+            // Unimplemented variable from C or C++
+            if variable.chars().last().unwrap() != codegen::_KALEM_UNIMPLEMENTED {
+                // TODO: !syntax_rules("function_argument" eq "string" replace "std::string")
+                if variable == "string" {
+                    variable = variable.replace(&variable, "std::string");
+                }
+            }
+            else {
+                if variable.len() > 1 {
+                    variable.pop();
+                }
             }
 
             // Function arguments are not supported yet.

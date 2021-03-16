@@ -87,7 +87,7 @@
         @return __data
     }
 
-    @split(string data, char delimiter) std::vector<std::string> {
+    @split(string data, char delimiter) std::vector<std::string>? {
         #std::vector<std::string> tokens;
         #std::istringstream stream(data);
 

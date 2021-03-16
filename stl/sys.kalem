@@ -20,11 +20,11 @@
 #defn SUCCESS 0
 
 @ios namespace {
-    @system(string data) i8 {
+    @system(string data) i8? {
         @return std::system(data.c_str())
     }
 
-    @getenvi(string env) std::string {
+    @getenvi(string env) string {
         @return static_cast<std::string>(getenv(env.c_str()))
     }
 
