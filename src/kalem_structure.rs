@@ -40,14 +40,15 @@ fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut _tokens: Vec<&str>;
 
-    let mut is_argument: bool = false;
-    let mut is_main    : bool = false;
-    let mut is_class   : bool = false;
-    let mut is_function: bool = false;
-    let mut is_switch  : bool = false;
-    let mut is_case    : bool = false;
-    let mut is_variable: bool = false;
-    let mut is_include : bool = false;
+    let mut is_argument : bool = false;
+    let mut is_main     : bool = false;
+    let mut is_class    : bool = false;
+    let mut is_function : bool = false;
+    let mut is_switch   : bool = false;
+    let mut is_case     : bool = false;
+    let mut is_variable : bool = false;
+    let mut is_include  : bool = false;
+    let mut is_statement: bool = false;
 
     let mut vec_size;
 
@@ -367,7 +368,10 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         },
                         codegen::LEFT_CURLY_BRACKET =>  kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
                         codegen::RIGHT_CURLY_BRACKET => {
-                            if is_variable {
+                            if is_statement {
+                                is_statement = false;
+                            }
+                            else if is_variable {
                                 is_variable = false;
                                 break;
                             }
@@ -479,6 +483,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                               get_statement_data(_tokens.to_vec(), i).as_str(),
                                               "",
                                               "");
+
+                                is_statement = true;
                             }
                             else if _tokens[i] == codegen::_KALEM_ELSE_IF {
                                 kalem_codegen(KalemTokens::KalemElseIf,
@@ -486,6 +492,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                               get_statement_data(_tokens.to_vec(), i).as_str(),
                                               "",
                                               "");
+
+                                is_statement = true;
                             }
                             else if _tokens[i] == codegen::_KALEM_ELSE {
                                 kalem_codegen(KalemTokens::KalemElse, &mut codegen, "", "", "");

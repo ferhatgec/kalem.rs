@@ -153,10 +153,10 @@
     @print argv[argc-1]
     @print "\n"
 
-    if argc == 1 {
+    if argc eq 1 {
         @print "Where's my argument, sst.\n"
     }
-    elsif argc == 2 {
+    elsif argc eq 2 {
         @print "Long time no see, argument!\n"
     }
     els {
@@ -169,7 +169,7 @@
         @print "Hello, world!\n"
         ++i
 
-        if i == 2 {
+        if i eq 2 {
             break
         }
     }

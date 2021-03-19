@@ -43,7 +43,7 @@
 
     @toupper(char ch) int {
         // A - 32 = A
-    	if tools::islower(ch) == 1 {
+    	if tools::islower(ch) eq 1 {
     	    @ch=ch-32
     	}
 
@@ -52,7 +52,7 @@
 
     @tolower(char ch) int {
         // A + 32 = a
-    	if tools::isupper(ch) == 1 {
+    	if tools::isupper(ch) eq 1 {
     	    @ch=ch+32
     	}
 

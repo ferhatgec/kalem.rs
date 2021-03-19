@@ -58,6 +58,9 @@ pub mod codegen {
 
     pub const _KALEM_UNIMPLEMENTED:     char = '?';
 
+    pub const _KALEM_STATEMENT_EQ:      &str = "eq";
+    pub const _KALEM_STATEMENT_UNEQ:    &str = "uneq";
+
     pub const _CPP_KALEM_INT:           &str = "int";
     pub const _CPP_KALEM_UNSIGNED:      &str = "unsigned";
     pub const _CPP_KALEM_STRING:        &str = "string";
@@ -93,7 +96,6 @@ pub mod codegen {
 
     pub const _CPP_KALEM_VECTOR:        &str = "vector";
 
-
     pub const LESS_THAN:                char = '<';
     pub const GREATER_THAN:             char = '>';
 
@@ -111,7 +113,9 @@ pub mod codegen {
     pub const SHARP:                    char = '#';
 
     pub const SEMICOLON:                char = ';';
+
     pub const EQUAL:                    char = '=';
+    pub const UNEQUAL:                  char = '!';
 
     pub const FLAG_START:               char = '!';
 
@@ -177,6 +181,9 @@ pub enum KalemTokens {
     // KalemUnImplemented,
 
     KalemLink,
+
+    // KalemStatementEq,
+    // KalemStatementUnEq,
 
     KalemLeftCurlyBracket,
     KalemRightCurlyBracket,

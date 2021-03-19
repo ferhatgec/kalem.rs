@@ -71,9 +71,8 @@
             f 0
         }
 
-        print "log"
         if data.length() > 1 {
-            loop data[f] != '\0' {
+            loop data[f] uneq '\0' {
                 @__data=__data*10+data[f]-'0'
 
                 ++f

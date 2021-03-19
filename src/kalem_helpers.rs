@@ -7,6 +7,8 @@
 
 use crate::{
     kalem_codegen::KalemCase,
+
+    kalem_codegen::codegen,
 };
 
 use std::path::Path;
@@ -19,8 +21,20 @@ pub fn get_statement_data<'a>(tokens: Vec<&'a str>, i: usize) -> String {
         if tokens[f].chars().nth(tokens[f].len() - 1).unwrap() == '{' {
             break;
         } else {
-            string_data.push_str(tokens[f]);
+            match tokens[f] {
+                codegen::_KALEM_STATEMENT_EQ => {
+                    string_data.push(codegen::EQUAL);
+                    string_data.push(codegen::EQUAL);
+                },
+                codegen::_KALEM_STATEMENT_UNEQ => {
+                    string_data.push(codegen::UNEQUAL);
+                    string_data.push(codegen::EQUAL);
+                },
+                _ => string_data.push_str(tokens[f])
+            }
+
             string_data.push(' ');
+
             f = f + 1;
         }
     }
