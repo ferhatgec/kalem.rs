@@ -41,12 +41,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut _tokens: Vec<&str>;
 
     let mut is_argument: bool = false;
-    let mut is_main:     bool = false;
-    let mut is_class:    bool = false;
+    let mut is_main    : bool = false;
+    let mut is_class   : bool = false;
     let mut is_function: bool = false;
-    let mut is_switch:   bool = false;
-    let mut is_case:     bool = false;
+    let mut is_switch  : bool = false;
+    let mut is_case    : bool = false;
     let mut is_variable: bool = false;
+    let mut is_include : bool = false;
 
     let mut vec_size;
 
@@ -92,10 +93,24 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             break;
                         },
                         codegen::SHARP => {
+                            // Import directive does not support multi-line.
+                            //
+                            // #include {
+                            //  <ios>
+                            //  <stdstr>
+                            //  "my_file"
+                            // }
+                            //
                             if _tokens[i] == format!("#{}", codegen::_KALEM_IMPORT).as_str() {
                                 kalem_codegen(KalemTokens::KalemImport, &mut codegen, _tokens[i + 1], "", "");
                             }
                             else if _tokens[i] == format!("#{}", codegen::_KALEM_INCLUDE).as_str() {
+                                if _tokens[i + 1].chars().next().unwrap() == codegen::LEFT_CURLY_BRACKET
+                                    && !is_main {
+                                    is_include = true;
+                                    break;
+                                }
+
                                 kalem_codegen(KalemTokens::KalemInclude, &mut codegen, _tokens[i + 1], "", "");
                             }
                             else if _tokens[i] == format!("#{}", codegen::_KALEM_DEFINE).as_str() {
@@ -356,6 +371,10 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 is_variable = false;
                                 break;
                             }
+                            else if is_include {
+                                is_include = false;
+                                break;
+                            }
                             else if is_class && !is_function {
                                 kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, ";", "", "");
                                 is_class = false;
@@ -388,6 +407,17 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 let x = var_type;
 
                                 kalem_codegen(x, &mut codegen, _tokens[i + 1], _tokens[i], "");
+
+                                break;
+                            }
+
+                            if is_include {
+                                match _tokens[i].chars().next().unwrap() {
+                                    codegen::LESS_THAN | codegen::QUOTATION_MARK => {
+                                        kalem_codegen(KalemTokens::KalemInclude, &mut codegen, _tokens[i], "", "");
+                                    },
+                                    _=> { continue; }
+                                }
 
                                 break;
                             }

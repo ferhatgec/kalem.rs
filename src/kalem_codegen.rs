@@ -93,6 +93,12 @@ pub mod codegen {
 
     pub const _CPP_KALEM_VECTOR:        &str = "vector";
 
+
+    pub const LESS_THAN:                char = '<';
+    pub const GREATER_THAN:             char = '>';
+
+    pub const QUOTATION_MARK:           char = '"';
+
     pub const LEFT_CURLY_BRACKET:       char = '{';
     pub const RIGHT_CURLY_BRACKET:      char = '}';
 

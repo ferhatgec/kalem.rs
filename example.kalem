@@ -3,14 +3,28 @@
 !required_flag("source")
 
 // STL
-#include <ios>
-#include <stdstr>
-#include <variables>
-#include <math>
-#include <tools>
-#include <sys>
-#include <stream>
-#include <vect>
+#include {
+    <ios>
+    <stdstr>
+    <variables>
+    <math>
+    <tools>
+    <sys>
+    <stream>
+    <vect>
+}
+
+// Same with
+// :
+// #include <ios>
+// #include <stdstr>
+// #include <variables>
+// #include <math>
+// #include <tools>
+// #include <sys>
+// #include <stream>
+// #include <vect>
+
 
 #defn LOWERCASE_A 'a'
 #defn UPPERCASE_A 'A'
