@@ -51,27 +51,28 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut is_variable : bool = false;
     let mut is_include  : bool = false;
     let mut is_statement: bool = false;
+    let mut is_defn     : bool = false;
 
     let mut vec_size;
 
     let mut var_type: KalemTokens = KalemTokens::KalemUndefined;
 
     let mut codegen = KalemCodegenStruct {
-        kalem_generated: "".to_string(),
+        kalem_generated   : "".to_string(),
 
-        kalem_output: "".to_string(),
+        kalem_output      : "".to_string(),
 
         kalem_cpp_standard: "c++17".to_string(),
-        kalem_cpp_flags: "-lstdc++fs".to_string(),
-        kalem_cpp_dirs: "-I/usr/include/kalem/stl/ ".to_string(),
+        kalem_cpp_flags   : "-lstdc++fs".to_string(),
+        kalem_cpp_dirs    : "-I/usr/include/kalem/stl/ ".to_string(),
         kalem_cpp_compiler: "clang++".to_string(),
-        kalem_cpp_sysroot: "".to_string(),
-        kalem_structure:  data.kalem_filename.clone(),
+        kalem_cpp_sysroot : "".to_string(),
+        kalem_structure   : data.kalem_filename.clone(),
 
         kalem_source_files: vec![],
 
-        kalem_cpp_output: false,
-        kalem_library:    false,
+        kalem_cpp_output  : false,
+        kalem_library     : false,
 
         kalem_ignore_case_warnings: false
     };
@@ -118,7 +119,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 kalem_codegen(KalemTokens::KalemInclude, &mut codegen, _tokens[i + 1], "", "");
                             }
                             else if _tokens[i] == format!("#{}", codegen::_KALEM_DEFINE).as_str() {
-                                if _tokens[i + 2].chars().next().unwrap() == '"' {
+                                if _tokens[i + 1].chars().next().unwrap() == codegen::LEFT_CURLY_BRACKET {
+                                    is_defn  = true;
+                                    var_type = KalemTokens::KalemDefine;
+
+                                    break;
+                                }
+                                else if _tokens[i + 2].chars().next().unwrap() == '"' {
                                     let mut string_data: String = String::new();
                                     let mut f: usize = i + 2;
 
@@ -380,29 +387,37 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         codegen::LEFT_CURLY_BRACKET =>  kalem_codegen(KalemTokens::KalemLeftCurlyBracket, &mut codegen, "", "", ""),
                         codegen::RIGHT_CURLY_BRACKET => {
                             if is_statement {
-                                is_statement = false;
+                                is_statement= false;
+                            }
+                            else if is_defn {
+                                is_defn     = false;
+
+                                break;
                             }
                             else if is_variable {
                                 is_variable = false;
+
                                 break;
                             }
                             else if is_include {
-                                is_include = false;
+                                is_include  = false;
+
                                 break;
                             }
                             else if is_class && !is_function {
                                 kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, ";", "", "");
-                                is_class = false;
+                                is_class    = false;
+
                                 break;
                             }
                             else if is_function {
                                 is_function = false;
                             }
                             else if is_case && is_switch {
-                                is_case = false;
+                                is_case     = false;
                             }
                             else if is_case && is_switch {
-                                is_switch = false;
+                                is_switch   = false;
                             }
 
                             kalem_codegen(KalemTokens::KalemRightCurlyBracket, &mut codegen, "", "", "");
@@ -418,7 +433,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                         },
                         _ => {
-                            if is_variable {
+                            if is_variable || is_defn {
                                 let x = var_type;
 
                                 kalem_codegen(x, &mut codegen, _tokens[i + 1], _tokens[i], "");

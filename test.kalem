@@ -1,8 +1,13 @@
 // 'required_flag' defines type of file (required for libraries)
 !required_flag("library")
 
-#import <ios>
+#include <ios>
 
 @my_test void {
 	@print "Greetings from test.kalem!\n"
 }
+
+// Unused function argument
+// @HelloWorld(string test) void {
+//    @ios::println("Hello", "world!")
+// }

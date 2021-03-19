@@ -26,8 +26,10 @@
 // #include <vect>
 
 
-#defn LOWERCASE_A 'a'
-#defn UPPERCASE_A 'A'
+#defn {
+    LOWERCASE_A 'a'
+    UPPERCASE_A 'A'
+}
 
 // Some of Kalem's runtime flags
 !flag("output=testikebabi")
