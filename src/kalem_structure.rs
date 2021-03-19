@@ -66,6 +66,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
         kalem_cpp_dirs: "-I/usr/include/kalem/stl/ ".to_string(),
         kalem_cpp_compiler: "clang++".to_string(),
         kalem_cpp_sysroot: "".to_string(),
+        kalem_structure:  data.kalem_filename.clone(),
 
         kalem_source_files: vec![],
 

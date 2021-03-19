@@ -12,6 +12,7 @@ pub enum KalemErrors {
     SyntaxError = 0,
     WarningUnsupported,
     HelpCase,
+    InfoKalemRs
 }
 
 pub struct KalemErrorData<'a> {
@@ -35,7 +36,10 @@ impl KalemErrorData<'_> {
             "\x1b[1;93mwarning\x1b[1;37m: \x1b[1;36m*type*\x1b[1;97m is unsupported.",
 
             // {case} {token}
-            "\x1b[0;92mhelp\x1b[1;37m: Use \x1b[1;96m*case*\x1b[1;97m instead of \x1b[1;36m*token*\x1b[1;97m."
+            "\x1b[0;92mhelp\x1b[1;37m: Use \x1b[1;96m*case*\x1b[1;97m instead of \x1b[1;36m*token*\x1b[1;97m.",
+
+            // {case}
+            "\x1b[0;93minfo\x1b[1;37m: Kalem.rs is not supporting \x1b[1;96m*case*\x1b[1;97m yet. \x1b[1;92mIgnored."
         ];
 
         KalemErrorData {
@@ -68,18 +72,25 @@ impl KalemErrorData<'_> {
         let x = KalemErrorData::replformat(KalemErrorData::initialize()
                                                .errors[error as usize]
                                                .to_string(),
-                                   vec! {
-                                       "*token*",
-                                       "*type*" ,
-                                       "*case*"
-                                   },
-                                    vec! {
-                                        token,
-                                        token,
-                                        additional
-                                    }
+                                            vec! {
+                                                "*token*",
+                                                "*type*" ,
+                                                "*case*"
+                                            },
+                                            vec! {
+                                                token,
+                                                token,
+                                                additional
+                                            }
         );
 
-        println!("\x1b[0;37m[\x1b[0;93m{}\x1b[1;97m] ~~> \x1b[1;37m{} : \x1b[1;97m{}\n-> {}\x1b[1;97m", file, line, token, x);
+        println!("{}\n\x1b[0;37m[\x1b[0;93m{}\x1b[1;97m] ~~> \x1b[1;37m{} : \x1b[1;97m{}\n-> {}\x1b[1;97m\n{}",
+                 "-----",
+                 file,
+                 line,
+                 token,
+                 x,
+                 "-----"
+        );
     }
 }

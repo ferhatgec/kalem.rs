@@ -13,6 +13,11 @@ use crate::kalem_helpers::{
     extract_file_name
 };
 
+use crate::kalem_handler::{
+    KalemErrorData,
+    KalemErrors,
+};
+
 #[allow(dead_code)]
 pub mod codegen {
     pub const _KALEM_INT:               &str = "int";
@@ -203,6 +208,7 @@ pub struct KalemCodegenStruct {
     pub kalem_cpp_dirs:     String,
     pub kalem_cpp_compiler: String,
     pub kalem_cpp_sysroot:  String,
+    pub kalem_structure:    String,
 
     pub kalem_source_files: Vec<String>,
 
@@ -482,7 +488,12 @@ pub fn kalem_codegen(token: KalemTokens,
                     }
                 }
                 else if flag_name == "hash-cache" {
-                    println!("info: {}", "Kalem.rs is not supporting hash caching yet.");
+                    KalemErrorData::output(KalemErrors::InfoKalemRs,
+                                           data.kalem_structure.clone(),
+                                           variable,
+                                           flag_name.as_str(),
+                                           "hash caching"
+                    );
                 }
 
                 drop(flag_name);
