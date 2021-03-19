@@ -43,7 +43,7 @@
 !flag("cpp-flags=false")
 
 // Ignore case warnings (snake_case, PascalCase etc.)
-!flag("ignore-case-warnings=true")
+!flag("ignore-case-warnings=false")
 
 !include_dir("./cpplib/")
 !include_dir("./")

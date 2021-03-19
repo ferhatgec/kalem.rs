@@ -14,6 +14,8 @@ use crate:: {
 
     kalem_types::is_numeric_data,
 
+    kalem_handler::*,
+
     Kalem
 };
 
@@ -186,9 +188,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                                 // TODO: Create case_warning() function
                                                 if !codegen.kalem_ignore_case_warnings {
                                                     match get_case(function_name.as_str()) {
-                                                        KalemCase::PascalCase =>
-                                                        // Create log system for warnings, errors.
-                                                            println!("help: Convert '{}' to snake_case", function_name),
+                                                        KalemCase::PascalCase => {
+                                                            KalemErrorData::output(KalemErrors::HelpCase,
+                                                                                   data.kalem_filename.to_owned(),
+                                                                                   ip.as_str(),
+                                                                                   function_name.as_str(),
+                                                                                   "snake_case");
+                                                        },
                                                         _ => {}
                                                     }
                                                 }
@@ -277,9 +283,13 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                             // as snake_case on by default.
                                             if !codegen.kalem_ignore_case_warnings {
                                                 match get_case(function_name.as_str()) {
-                                                    KalemCase::PascalCase =>
-                                                    // Create log system for warnings, errors.
-                                                        println!("help: Convert '{}' to snake_case", function_name),
+                                                    KalemCase::PascalCase => {
+                                                        KalemErrorData::output(KalemErrors::HelpCase,
+                                                                               data.kalem_filename.to_owned(),
+                                                                               ip.as_str(),
+                                                                               function_name.as_str(),
+                                                                               "snake_case");
+                                                    },
                                                     _ => {}
                                                 }
                                             }

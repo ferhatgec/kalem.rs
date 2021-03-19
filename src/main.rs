@@ -22,6 +22,7 @@ mod kalem_codegen;
 mod kalem_structure;
 mod kalem_helpers;
 mod kalem_types;
+mod kalem_handler;
 
 use kalem_codegen::{
     KalemCodegenStruct,
