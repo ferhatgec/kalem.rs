@@ -32,20 +32,22 @@
 }
 
 // Some of Kalem's runtime flags
-!flag("output=testikebabi")
-!flag("cpp-standard=c++2a")
-!flag("cpp-output=true")
-!flag("cpp-sysroot=false")
-!flag("hash-cache=false")
+!flag {
+    "output=testikebabi"
+    "cpp-standard=c++2a"
+    "cpp-output=true"
+    "cpp-sysroot=false"
+    "hash-cache=false"
 
-// default=clang
-!flag("cpp-compiler=default")
+    // default=clang
+    "cpp-compiler=default"
 
-// Its type is not boolean.
-!flag("cpp-flags=false")
+    // Its type is not boolean.
+    "cpp-flags=false"
 
-// Ignore case warnings (snake_case, PascalCase etc.)
-!flag("ignore-case-warnings=false")
+    // Ignore case warnings (snake_case, PascalCase etc.)
+    "ignore-case-warnings=false"
+}
 
 !include_dir("./cpplib/")
 !include_dir("./")

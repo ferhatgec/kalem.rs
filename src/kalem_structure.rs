@@ -54,6 +54,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut is_include  : bool = false;
     let mut is_statement: bool = false;
     let mut is_defn     : bool = false;
+    let mut is_flag     : bool = false;
 
     let mut vec_size;
 
@@ -359,6 +360,14 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         },
                         codegen::FLAG_START => {
                             if ip.contains(format!("!{}", codegen::_KALEM_FLAG).as_str()) {
+                                if i + 1 < vec_size {
+                                    if _tokens[i + 1].chars().next().unwrap() == codegen::LEFT_CURLY_BRACKET {
+                                        is_flag = true;
+
+                                        break;
+                                    }
+                                }
+
                                 kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.as_str(), "");
                             }
                             else if ip.contains(format!("!{}", codegen::_KALEM_REQUIRED_FLAG).as_str()) {
@@ -375,6 +384,11 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         codegen::RIGHT_CURLY_BRACKET => {
                             if is_statement {
                                 is_statement= false;
+                            }
+                            else if is_flag {
+                                is_flag     = false;
+
+                                break;
                             }
                             else if is_defn {
                                 is_defn     = false;
@@ -420,6 +434,14 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                         },
                         _ => {
+                            if is_flag {
+                                println!("lol: {}", ip);
+
+                                kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.trim(), "");
+
+                                break;
+                            }
+
                             if is_variable || is_defn {
                                 let x = var_type;
 

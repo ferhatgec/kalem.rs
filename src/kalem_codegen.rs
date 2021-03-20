@@ -448,7 +448,11 @@ pub fn kalem_codegen(token: KalemTokens,
         },
         KalemTokens::KalemFlag => {
             if variable.len() > 6 {
-                let (flag_name, flag_data) = get_flag_data(variable, 6);
+                let (flag_name, flag_data) = if variable.chars().next().unwrap() == codegen::QUOTATION_MARK {
+                    get_flag_data(variable, 0)
+                } else {
+                    get_flag_data(variable, 6)
+                };
 
                 if flag_name == "output" {
                     data.kalem_output = flag_data;
