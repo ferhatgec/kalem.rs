@@ -435,8 +435,6 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                         },
                         _ => {
                             if is_flag {
-                                println!("lol: {}", ip);
-
                                 kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.trim(), "");
 
                                 break;
