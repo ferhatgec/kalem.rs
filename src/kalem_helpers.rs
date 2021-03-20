@@ -42,6 +42,29 @@ pub fn get_statement_data<'a>(tokens: Vec<&'a str>, i: usize) -> String {
     string_data
 }
 
+pub fn get_string_data(tokens: Vec<&str>, i: usize) -> String {
+    let mut string_data = String::new();
+
+    // if tokens[i + 2].chars().next().unwrap() == codegen::QUOTATION_MARK {
+        let mut f: usize = i + 2;
+
+        loop {
+            string_data.push_str(tokens[f]);
+
+            if tokens[f].chars().nth(tokens[f].len() - 1).unwrap() == codegen::QUOTATION_MARK {
+                break;
+            }
+            else {
+                string_data.push(' ');
+
+                f = f + 1;
+            }
+        }
+    // }
+
+    string_data
+}
+
 pub fn get_flag_data<'a>(_variable: &'a str, n: usize) -> (String, String) {
     let mut flag_name = String::new();
     let mut flag_data = String::new();

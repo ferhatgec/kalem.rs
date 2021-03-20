@@ -33,6 +33,8 @@ use crate::kalem_codegen::{
     codegen
 };
 
+use crate::kalem_helpers::get_string_data;
+
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
     where P: AsRef<Path>, {
     let file = File::open(filename)?;
@@ -125,23 +127,8 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                                     break;
                                 }
-                                else if _tokens[i + 2].chars().next().unwrap() == '"' {
-                                    let mut string_data: String = String::new();
-                                    let mut f: usize = i + 2;
-
-                                    loop {
-                                        string_data.push_str(_tokens[f]);
-
-                                        if _tokens[f].chars().nth(_tokens[f].len()-1).unwrap() == '"' {
-                                            break;
-                                        }
-                                        else {
-                                            string_data.push(' ');
-                                            f = f + 1;
-                                        }
-                                    }
-
-                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, string_data.as_str(), _tokens[i + 1], "");
+                                else if _tokens[i + 2].chars().next().unwrap() == codegen::QUOTATION_MARK {
+                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, get_string_data(_tokens.clone(), i).as_str(), _tokens[i + 1], "");
                                 }
                                 else {
                                     kalem_codegen(KalemTokens::KalemDefine, &mut codegen, _tokens[i + 2], _tokens[i + 1], "");
@@ -455,29 +442,17 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             if _tokens[i] == codegen::_KALEM_STRING
                                 || _tokens[i] == codegen::_KALEM_STR {
                                 if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {
-                                    let mut string_data: String = String::new();
-
-                                    if _tokens[i + 2].chars().next().unwrap() == '"' {
-                                        let mut f: usize = i + 2;
-                                        loop {
-                                            string_data.push_str(_tokens[f]);
-                                            if _tokens[f].chars().nth(_tokens[f].len() - 1).unwrap() == '"' {
-                                                break;
-                                            }
-                                            else {
-                                                string_data.push(' ');
-                                                f = f + 1;
-                                            }
-                                        }
-                                    }
-
                                     let x = if _tokens[i] == codegen::_KALEM_STRING {
                                         KalemTokens::KalemString
                                     } else {
                                         KalemTokens::KalemStr
                                     };
 
-                                    kalem_codegen(x, &mut codegen, string_data.as_str(), _tokens[i + 1], "");
+                                    if _tokens[i + 2].chars().next().unwrap() == codegen::QUOTATION_MARK {
+                                        kalem_codegen(x, &mut codegen, get_string_data(_tokens.clone(), i).as_str(), _tokens[i + 1], "");
+                                    } else {
+                                        kalem_codegen(x, &mut codegen, "", _tokens[i + 1], "");
+                                    };
                                 }
                             }
                             else if _tokens[i] == codegen::_KALEM_INT
