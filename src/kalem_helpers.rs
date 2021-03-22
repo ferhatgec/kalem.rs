@@ -42,11 +42,11 @@ pub fn get_statement_data<'a>(tokens: Vec<&'a str>, i: usize) -> String {
     string_data
 }
 
-pub fn get_string_data(tokens: Vec<&str>, i: usize) -> String {
+pub fn get_string_data(tokens: Vec<&str>, i: usize, is_multi_line: bool) -> String {
     let mut string_data = String::new();
 
     // if tokens[i + 2].chars().next().unwrap() == codegen::QUOTATION_MARK {
-        let mut f: usize = i + 2;
+        let mut f: usize = if is_multi_line { i + 1 } else { i + 2 };
 
         loop {
             string_data.push_str(tokens[f]);

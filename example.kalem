@@ -105,14 +105,16 @@
 }
 
 @main int {
-    string test "[Hello, Kalem!]\n"
-    string str_year "2021"
-    string exec_data "ls"
-    string split_test "Hi-Kalem.rs-huh"
-
+    string {
+        test "[Hello, Kalem!]\n"
+        str_year "2021"
+        exec_data "ls"
+        split_test "Hi-Kalem.rs-huh"
+    }
 
     int _test 10
     unsign _test_ 20
+
     str my_str_test "Hello str!\n"
 
     int {

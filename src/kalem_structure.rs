@@ -55,6 +55,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
     let mut is_statement: bool = false;
     let mut is_defn     : bool = false;
     let mut is_flag     : bool = false;
+    let mut is_string   : bool = false;
 
     let mut vec_size;
 
@@ -129,7 +130,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     break;
                                 }
                                 else if _tokens[i + 2].chars().next().unwrap() == codegen::QUOTATION_MARK {
-                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, get_string_data(_tokens.clone(), i).as_str(), _tokens[i + 1], "");
+                                    kalem_codegen(KalemTokens::KalemDefine, &mut codegen, get_string_data(_tokens.clone(), i, false).as_str(), _tokens[i + 1], "");
                                 }
                                 else {
                                     kalem_codegen(KalemTokens::KalemDefine, &mut codegen, _tokens[i + 2], _tokens[i + 1], "");
@@ -385,6 +386,11 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             if is_statement {
                                 is_statement= false;
                             }
+                            else if is_string {
+                                is_string   = false;
+
+                                break;
+                            }
                             else if is_flag {
                                 is_flag     = false;
 
@@ -434,6 +440,16 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                             }
                         },
                         _ => {
+                            if is_string {
+                                if _tokens[i + 1].chars().next().unwrap() == codegen::QUOTATION_MARK {
+                                    kalem_codegen(var_type, &mut codegen, get_string_data(_tokens.clone(), i, true).as_str(), _tokens[i], "");
+                                } else {
+                                    kalem_codegen(var_type, &mut codegen, "", _tokens[i], "");
+                                };
+
+                                break;
+                            }
+
                             if is_flag {
                                 kalem_codegen(KalemTokens::KalemFlag, &mut codegen, "", ip.trim(), "");
 
@@ -461,7 +477,18 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                             if _tokens[i] == codegen::_KALEM_STRING
                                 || _tokens[i] == codegen::_KALEM_STR {
-                                if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {
+                                if _tokens[i + 1].chars().next().unwrap() == codegen::LEFT_CURLY_BRACKET {
+                                    is_string = true;
+
+                                    var_type = if _tokens[i] == codegen::_KALEM_STRING {
+                                        KalemTokens::KalemString
+                                    } else {
+                                        KalemTokens::KalemStr
+                                    };
+
+                                    break;
+                                }
+                                else if _tokens[i + 2].chars().next().unwrap() != codegen::EQUAL {
                                     let x = if _tokens[i] == codegen::_KALEM_STRING {
                                         KalemTokens::KalemString
                                     } else {
@@ -469,7 +496,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     };
 
                                     if _tokens[i + 2].chars().next().unwrap() == codegen::QUOTATION_MARK {
-                                        kalem_codegen(x, &mut codegen, get_string_data(_tokens.clone(), i).as_str(), _tokens[i + 1], "");
+                                        kalem_codegen(x, &mut codegen, get_string_data(_tokens.clone(), i, false).as_str(), _tokens[i + 1], "");
                                     } else {
                                         kalem_codegen(x, &mut codegen, "", _tokens[i + 1], "");
                                     };
