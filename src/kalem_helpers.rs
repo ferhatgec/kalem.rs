@@ -65,6 +65,24 @@ pub fn get_string_data(tokens: Vec<&str>, i: usize, is_multi_line: bool) -> Stri
     string_data
 }
 
+pub fn get_notation_data(tokens: Vec<&str>, i: usize) -> String {
+    let mut notation_data = String::new();
+
+    let mut f: usize = i + 1;
+
+    loop {
+        if f == tokens.len() { break; }
+
+        notation_data.push_str(tokens[f]);
+
+        notation_data.push(' ');
+
+        f = f + 1;
+    }
+
+    return notation_data;
+}
+
 pub fn get_flag_data<'a>(_variable: &'a str, n: usize) -> (String, String) {
     let mut flag_name = String::new();
     let mut flag_data = String::new();

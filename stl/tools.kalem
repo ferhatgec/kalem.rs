@@ -14,31 +14,31 @@
 
 @tools namespace {
     @isupper(char ch) int {
-        @return (ch>='A'&&ch<='Z')
+        @return (ch >= 'A' && ch <= 'Z')
     }
 
     @islower(char ch) int {
-        @return (ch>='a'&&ch<='z')
+        @return (ch >= 'a' && ch <='z')
     }
 
     @isalpha(char ch) int {
-    	@return (tools::isupper(ch)||tools::islower(ch))
+    	@return (tools::isupper(ch) || tools::islower(ch))
     }
 
     @isdigit(char ch) int {
-        @return (ch>='0'&&ch<='9')
+        @return (ch >= '0' && ch <= '9')
     }
 
     @isalnum(char ch) int {
-      	@return (tools::isalpha(ch)||tools::isdigit(ch))
+      	@return (tools::isalpha(ch) || tools::isdigit(ch))
     }
 
     @isblank(char ch) int {
-    	@return (ch==0x20)
+    	@return (ch == 0x20)
     }
 
     @isprint(char ch) int {
-      	@return (ch>=0x20&&ch<=0x7E)
+      	@return (ch >= 0x20 && ch <= 0x7E)
     }
 
     @toupper(char ch) int {

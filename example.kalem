@@ -83,6 +83,7 @@
     @print "Hi, from Kalem function!\n"
 }
 
+
 @my_arguments(string name, int age) void {
     @print "Hi, "
     @print name
@@ -156,7 +157,7 @@
     @print argc
 
     @print "\nargv[argc - 1]: "
-    @print argv[argc-1]
+    @print argv[argc - 1]
     @print "\n"
 
     if argc eq 1 {
@@ -181,7 +182,7 @@
     }
 
     @print "StringTools: "
-    @print stringtools::GetBetweenString(test,"[","]")
+    @print stringtools::GetBetweenString(test, "[", "]")
     @print "\n"
 
     @my_test
@@ -208,7 +209,7 @@
 
     // Base = 10 logarithm
     @print "log(32) : "
-    @print math::log(32,10)
+    @print math::log(32, 10)
 
     @print "\nabs(-2021) : "
     @print math::abs(-2021)
@@ -265,8 +266,7 @@
     string home "HOME"
 
     @print "HOME environment: "
-    @print ios::getenvi(home)
-    @print "\n"
+    @print ios::getenvi(home) + "\n"
 
     //@return 0
 

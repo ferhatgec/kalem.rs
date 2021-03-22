@@ -33,7 +33,7 @@ use crate::kalem_codegen::{
     codegen
 };
 
-use crate::kalem_helpers::get_string_data;
+use crate::kalem_helpers::{get_string_data, get_notation_data};
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
     where P: AsRef<Path>, {
@@ -97,7 +97,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                 while i < vec_size {
                     match _tokens[i].chars().nth(0).unwrap() as char {
                         codegen::SLASH => {
-                            if _tokens[i].chars().nth(1).unwrap() == '/' {}
+                            // if _tokens[i].chars().nth(1).unwrap() == '/' {}
 
                             break;
                         },
@@ -149,7 +149,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                 is_main = true;
                             }
                             else if _tokens[i] == format!("@{}", codegen::_KALEM_RETURN) {
-                                kalem_codegen(KalemTokens::KalemReturn, &mut codegen, _tokens[i + 1], "", "");
+                                kalem_codegen(KalemTokens::KalemReturn, &mut codegen, get_notation_data(_tokens.clone(), i).as_str(), "", "");
                             }
                             else if _tokens[i] == format!("@{}", codegen::_KALEM_PRINT) {
                                 if _tokens[i + 1].chars().next().unwrap() == '"' {
@@ -158,7 +158,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                                     kalem_codegen(KalemTokens::KalemPrint, &mut codegen, &ip[start..ip.len()], "", "");
                                 }
                                 else {
-                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, _tokens[i + 1], "", "");
+                                    kalem_codegen(KalemTokens::KalemPrint, &mut codegen, get_notation_data(_tokens, i).as_str(), "", "");
                                 }
 
                                 break;

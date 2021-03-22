@@ -28,6 +28,6 @@
     }
 
     @builtin_println(string data) void {
-        @print data+"\n"
+        @print data + "\n"
     }
 }

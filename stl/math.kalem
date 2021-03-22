@@ -19,7 +19,7 @@
             @return 1
         }
 
-        @return n*factorial(n-1)
+        @return n * factorial(n - 1)
     }
 
     @binary_log2(u32 n) u16? {
@@ -42,7 +42,7 @@
 
     // Base logarithm
     @log(u32 a, u32 b) u32 {
-        @return binary_log2(a)/binary_log2(b)
+        @return binary_log2(a) / binary_log2(b)
     }
 
     // Absolute
@@ -53,4 +53,4 @@
 
         @return i
     }
-} 
+}
