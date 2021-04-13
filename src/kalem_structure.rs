@@ -338,7 +338,7 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
 
                                         arguments.push(ip.chars().nth(f).unwrap());
 
-                                        if ip.chars().nth(f + 1).unwrap() == ')' {
+                                        if ip.chars().nth(f + 1).unwrap() == ')' && f + 1 == ip.len() {
                                             break;
                                         }
                                         else {
