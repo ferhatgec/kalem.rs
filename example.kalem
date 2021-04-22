@@ -283,5 +283,7 @@
 
     @ios::println(vect[0], vect[1], vect[2])
 
+    @ios::println(math::pow(2,7))
+
     @ios::exit(SUCCESS)
 }

@@ -41,7 +41,7 @@
     }
 
     // Base logarithm
-    @log(u32 a, u32 b) u32 {
+    @log(u32 a, u32 b) u32? {
         @return binary_log2(a) / binary_log2(b)
     }
 
@@ -52,5 +52,16 @@
         }
 
         @return i
+    }
+
+    @pow(i32 base, i32 exp) i32? {
+        if exp eq 0 {
+            @return 1
+        }
+        elsif exp % 2 eq 0 {
+            @return pow(base,exp/2)*pow(base,exp/2)
+        }
+
+        @return base*pow(base,exp/2)*pow(base,exp/2)
     }
 }
