@@ -95,6 +95,10 @@ pub fn read_source(data: Kalem) -> KalemCodegenStruct {
                 vec_size = _tokens.len();
 
                 while i < vec_size {
+                    if _tokens[i].is_empty() {
+                        break;
+                    }
+
                     match _tokens[i].chars().nth(0).unwrap() as char {
                         codegen::SLASH => {
                             // if _tokens[i].chars().nth(1).unwrap() == '/' {}
