@@ -134,6 +134,7 @@ pub mod codegen {
 pub mod append_codegen {
     pub const _CPP_KALEM_ARGC:          &str = "argc";
     pub const _CPP_KALEM_ARGV:          &str = "argv";
+    pub const _CPP_KALEM_ENVS:          &str = "env";
 
     pub const _CPP_IFNDEF:              &str = "ifndef";
     pub const _CPP_ENDIF:               &str = "endif";
@@ -402,14 +403,16 @@ pub fn kalem_codegen(token: KalemTokens,
             drop(argument);
         },
         KalemTokens::KalemMain => {
-            data.kalem_generated.push_str(format!("{} {}({} {}, {}** {})",
+            data.kalem_generated.push_str(format!("{} {}({} {}, {}** {}, {}** {})",
                                                   keyword,                          // Type
-                                                  codegen::_CPP_KALEM_MAIN,        // Main
-                                                  codegen::_CPP_KALEM_INT,         // Argument counter type
-                                                  append_codegen::_CPP_KALEM_ARGC, // Argument counter name
-                                                  codegen::_CPP_KALEM_CHAR,        // Argv type
-                                                  append_codegen::_CPP_KALEM_ARGV  // Argv name
-                                                    ).as_str());
+                                                  codegen::_CPP_KALEM_MAIN,         // Main
+                                                  codegen::_CPP_KALEM_INT,          // Argument counter type
+                                                  append_codegen::_CPP_KALEM_ARGC,  // Argument counter name
+                                                  codegen::_CPP_KALEM_CHAR,         // Argv type
+                                                  append_codegen::_CPP_KALEM_ARGV,  // Argv name
+                                                  codegen::_CPP_KALEM_CHAR,         // Env type
+                                                  append_codegen::_CPP_KALEM_ENVS   // Env name
+            ).as_str());
         },
         KalemTokens::KalemNamespace => {
             let keyword = keyword.chars().next().map(|c| &keyword[c.len_utf8()..]).unwrap();
